@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{
+  --ink:#3A3550;--ink-soft:#6A6488;--muted:#9A93B4;
+  --pink:#EE7AA8;--violet:#B98AE0;--blue:#7FA9E6;--warm:#F6C76B;
+  --grad:linear-gradient(90deg,#F6C76B,#EE7AA8 38%,#B98AE0 68%,#7FA9E6);
+  --grad-d:linear-gradient(135deg,#EE7AA8,#B98AE0 55%,#7FA9E6);
+  --grad-soft:linear-gradient(135deg,#FBE9F2,#EFEAFB 55%,#E8F0FB);
+  --paper:#F4F1FA;--paper-2:rgba(255,255,255,.78);
+  --teal:#8E7CD8;--teal-bright:#B98AE0;
+  --coral:#E86FA6;--coral-soft:#FCE0EC;
+  --plum:#8E7CD8;--plum-soft:#F1ECFB;
+  --olive:#5C84CE;--olive-soft:#E7F0FB;
+  --good:#7FA9E6;
+  --mist:#EFEAFB;--sage:#E8F0FB;
+  --line:rgba(150,130,200,.22);--line-soft:rgba(150,130,200,.13);
+  --shadow:0 12px 30px rgba(150,130,200,.16);--r:22px;
+}
+*{box-sizing:border-box}
+svg text,svg{font-family:'Nunito',system-ui,sans-serif}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(125% 90% at 80% -5%,#FBE9F2 0%,#EFEAFB 38%,#E8F0FB 70%,#F4F1FA 100%) fixed;color:var(--ink);font-family:'Nunito',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased;height:100dvh;overflow:hidden}
+
+/* ---- tweak themes ---- */
+html[data-vibe="vivid"]{--grad-d:linear-gradient(135deg,#FF5C9E,#A65CE8 55%,#5C8FF0);--grad:linear-gradient(90deg,#FFB24A,#FF5C9E 38%,#A65CE8 68%,#5C8FF0);--pink:#F0589C;--violet:#A65CE8}
+html[data-vibe="mono"]{--grad-d:linear-gradient(135deg,#A99AEA,#8174CE);--grad:linear-gradient(90deg,#C3B7F0,#A99AEA 50%,#8174CE);--pink:#8E7CD8;--warm:#B0A4E6}
+html[data-surface="solid"]{--paper-2:#ffffff}
+html[data-surface="solid"] .card,html[data-surface="solid"] .tile,html[data-surface="solid"] .chartcard,html[data-surface="solid"] .xrow,html[data-surface="solid"] .tog,html[data-surface="solid"] .gamebox{backdrop-filter:none;-webkit-backdrop-filter:none;background:#fff;border-color:rgba(150,130,200,.16)}
+html[data-surface="solid"] .tabbar{background:rgba(255,255,255,.97);backdrop-filter:none;-webkit-backdrop-filter:none}
+html[data-wash="sunrise"] body{background:radial-gradient(125% 95% at 50% -8%,#FFE7D2 0%,#FCE2EC 28%,#EFEAFB 60%,#E8F0FB 100%) fixed}
+html[data-wash="sky"] body{background:radial-gradient(125% 90% at 72% -5%,#E1EFFB 0%,#EAEAFB 42%,#F1ECFA 75%,#F4F1FA 100%) fixed}
+/* corners */
+html[data-corners="pillowy"]{--r:30px}
+html[data-corners="crisp"]{--r:10px}
+html[data-corners="crisp"] .tabbar{border-radius:18px 18px 0 0}
+html[data-corners="crisp"] .gradbar,html[data-corners="crisp"] .gradbar i{border-radius:4px}
+/* depth */
+html[data-depth="lifted"]{--shadow:0 22px 48px rgba(150,130,200,.3)}
+html[data-depth="flat"]{--shadow:0 1px 2px rgba(150,130,200,.12)}
+/* density */
+html[data-density="compact"] main{padding:76px 14px 120px}
+html[data-density="compact"] .card{padding:12px 13px;margin-top:10px}
+html[data-density="compact"] .tiles{gap:9px;margin-top:10px}
+html[data-density="compact"] .tile{padding:13px 12px}
+html[data-density="compact"] .xrow{padding:10px 12px;margin-top:8px}
+html[data-density="compact"] h2.title{font-size:24px}
+html[data-density="compact"] .rate{margin-top:13px}
+/* gauge accent intensity */
+html[data-glow="on"] .hero .gauge{filter:drop-shadow(0 6px 16px rgba(185,138,224,.45))}
+html[data-glow="on"] .tabbar .fab .fabic{box-shadow:0 10px 26px rgba(238,122,168,.6)}
+
+header{position:fixed;top:0;left:0;right:0;z-index:40;background:rgba(252,250,255,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(150,130,200,.14)}
+.head-row{max-width:880px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:12px;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.mark{width:34px;height:34px;border-radius:11px;flex:none;background:conic-gradient(from 210deg,#F6C76B,#EE7AA8,#B98AE0,#7FA9E6,#F6C76B);display:grid;place-items:center;color:#fff;font-weight:700;font-size:16px;box-shadow:0 6px 14px rgba(180,140,210,.35)}
+.brand h1{font-weight:600;font-size:15px;margin:0;letter-spacing:-.01em;white-space:nowrap}
+.brand p{margin:0;font-size:10.5px;color:var(--muted)}
+.hchips{display:flex;gap:7px;flex:none}
+.hchip{background:rgba(255,255,255,.66);border:1px solid var(--line-soft);border-radius:13px;padding:5px 10px;text-align:center;min-width:42px}
+.hchip b{display:block;font-weight:700;font-size:14px;color:var(--pink);line-height:1.1;font-variant-numeric:tabular-nums}
+.hchip span{font-size:8.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+
+main{width:100%;max-width:880px;margin:0 auto;padding:82px 18px 128px;height:100dvh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);font-weight:600}
+h2.title{font-weight:700;font-size:27px;line-height:1.1;letter-spacing:-.02em;margin:5px 0 0}
+@media(min-width:560px){h2.title{font-size:32px}}
+.sub{color:var(--ink-soft);font-size:14px;margin:7px 0 0;max-width:60ch}
+
+.card{background:var(--paper-2);border:1px solid rgba(255,255,255,.6);border-radius:var(--r);padding:16px 17px;margin-top:14px;box-shadow:var(--shadow);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.card.teal{background:var(--grad-d);color:#fff;border:none}
+.card.teal .cs{color:rgba(255,255,255,.9)}
+.ct{font-weight:600;font-size:15px}
+.cs{font-size:12.5px;color:var(--ink-soft);margin-top:3px}
+.cl{font-size:12.5px;font-weight:700;color:var(--ink-soft)}
+
+.hero .herotop{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hero .herolv{font-size:24px;font-weight:800;margin:6px 0 1px;background:linear-gradient(90deg,#E68FB8,#9B8FE0,#7FB0E6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .herosub{font-size:11.5px;color:var(--muted)}
+.hero .gauge{flex:none;margin:-4px -2px -10px 0}
+.streakpill{display:inline-flex;align-items:center;gap:6px;margin-top:11px;background:rgba(255,255,255,.6);border:1px solid var(--line-soft);border-radius:999px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--ink-soft)}
+.streakpill b{color:var(--pink);font-weight:800;font-variant-numeric:tabular-nums}
+
+.gradbar{position:relative;height:14px;border-radius:999px;background:var(--grad);overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.4)}
+.gradbar.light{margin-top:14px}
+.gradbar i{position:absolute;top:0;bottom:0;right:0;background:rgba(255,255,255,.66);border-left:2px solid rgba(255,255,255,.9);transition:width .4s ease}
+
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.tile{border:1px solid rgba(255,255,255,.6);border-radius:var(--r);padding:18px 15px;background:var(--paper-2);cursor:pointer;transition:.16s;box-shadow:var(--shadow);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);text-align:center}
+.tile:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(150,130,200,.22)}
+.tile .ti{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;margin:0 auto 11px}
+.tile .ti svg{width:20px;height:20px}
+.tile .ti i{font-size:19px;line-height:1}
+.tile b{font-size:14px;font-weight:600;display:block}
+.tile span{font-size:11px;color:var(--muted)}
+.p-teal{background:var(--mist);color:var(--violet)}.p-plum{background:var(--plum-soft);color:var(--plum)}.p-olive{background:var(--olive-soft);color:var(--olive)}.p-coral{background:var(--coral-soft);color:#C24B86}
+
+.days{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;margin-top:14px;padding-bottom:3px}
+.days::-webkit-scrollbar{display:none}
+.day{flex:none;font:inherit;cursor:pointer;font-size:12px;font-weight:500;padding:8px 13px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.62);color:var(--ink-soft);white-space:nowrap}
+.day[aria-current="true"]{background:var(--grad-d);color:#fff;border-color:transparent}
+.day[data-today="true"]:not([aria-current="true"]){border-color:var(--violet);color:var(--violet);font-weight:700}
+
+.xrow{display:flex;align-items:center;gap:11px;padding:13px 14px;border:1px solid rgba(255,255,255,.6);border-radius:16px;margin-top:11px;background:var(--paper-2);cursor:pointer;transition:.15s;box-shadow:var(--shadow);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.xrow:hover{transform:translateY(-1px);box-shadow:0 14px 30px rgba(150,130,200,.2)}
+.xrow.done{background:rgba(244,241,250,.5);border-color:var(--line-soft);box-shadow:none}
+.xrow.done:hover{transform:none;box-shadow:none}
+.xrow.done .xi{filter:grayscale(1);opacity:.45}
+.xrow.done .xt b{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(150,130,200,.45)}
+.xrow.done .xt span{opacity:.6}
+.xrow .xi{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-size:16px;flex:none}
+.xrow .xt{flex:1;min-width:0}
+.xrow .xt b{font-size:14px;font-weight:600;display:block}
+.xrow .xt span{font-size:11px;color:var(--muted)}
+.xrow .meta{text-align:right;flex:none}
+.xrow .star{font-size:12px;color:var(--pink);font-weight:700;font-variant-numeric:tabular-nums}
+.xrow .chk{width:30px;height:30px;border-radius:50%;background:var(--grad-d);color:#fff;display:grid;place-items:center;font-size:13px;box-shadow:0 3px 9px rgba(185,138,224,.45)}
+.grouplab{font-weight:600;font-size:14px;margin:20px 0 2px;display:flex;align-items:center;gap:8px}
+.grouplab .tag{font-size:9px;font-weight:700;background:var(--coral-soft);color:#C24B86;padding:2px 8px;border-radius:7px;text-transform:uppercase;letter-spacing:.05em}
+
+.btn{font:inherit;font-weight:600;font-size:14px;cursor:pointer;padding:12px 18px;border-radius:14px;border:none;background:var(--grad-d);color:#fff;transition:.15s;box-shadow:0 8px 18px rgba(200,120,180,.3)}
+.btn:hover{filter:brightness(1.04);transform:translateY(-1px)}
+.btn.ghost{background:rgba(255,255,255,.7);color:var(--teal);border:1px solid var(--line);box-shadow:none}
+.btn.sm{padding:8px 14px;font-size:12.5px;border-radius:11px}
+.btn:disabled{opacity:.45;cursor:default;box-shadow:none}
+.btn.full{width:100%;text-align:center}
+.backbtn{font:inherit;font-weight:500;font-size:13px;cursor:pointer;background:none;border:none;color:var(--teal);padding:0;margin-bottom:6px;display:inline-flex;align-items:center;gap:6px}
+
+input[type=text],textarea{font:inherit;width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.85);color:var(--ink)}
+input[type=text]:focus,textarea:focus{outline:none;border-color:var(--violet);box-shadow:0 0 0 3px rgba(185,138,224,.2)}
+label.fld{font-size:11px;font-weight:600;color:var(--teal);text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:5px}
+.lead{font-size:14px;color:var(--ink-soft);margin:8px 0 12px}
+.ex{font-size:12px;background:var(--mist);border-radius:8px;padding:2px 8px;color:var(--violet);font-weight:600}
+ul.clean{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:7px}
+ul.clean li{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;background:rgba(255,255,255,.55);border:1px solid var(--line-soft);border-radius:11px;padding:10px 12px}
+ul.clean li .d{width:6px;height:6px;border-radius:50%;background:var(--pink);margin-top:7px;flex:none}
+.clean.numbered li{align-items:center}
+.clean.numbered li .num{width:23px;height:23px;border-radius:7px;background:var(--grad-d);color:#fff;font-weight:800;font-size:11px;display:grid;place-items:center;flex:none;font-variant-numeric:tabular-nums}
+.note{font-size:12px;color:var(--ink-soft);margin-top:11px;display:flex;gap:8px;align-items:flex-start}
+.note .d{width:6px;height:6px;border-radius:50%;background:var(--pink);margin-top:6px;flex:none}
+
+.gamebox{background:rgba(255,255,255,.55);border:1px solid var(--line-soft);border-radius:16px;padding:16px;margin-top:13px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.clock{font-weight:700;font-size:30px;background:var(--mist);border-radius:13px;padding:6px 16px;text-align:center;min-width:96px;font-variant-numeric:tabular-nums}
+.clock.run{color:var(--pink)}
+.mtimer{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+.count-big{font-weight:700;font-size:30px;color:var(--violet);font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px;min-height:6px}
+.chip{background:var(--coral-soft);color:#C24B86;font-size:12px;font-weight:600;padding:4px 11px;border-radius:999px;animation:pop .2s ease}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.best{font-size:12px;color:var(--ink-soft);margin-top:10px;font-variant-numeric:tabular-nums}.best b{color:var(--pink)}
+.tw-text{font-weight:600;font-size:18px;line-height:1.3}
+.dots{display:flex;gap:5px}.dot{width:9px;height:9px;border-radius:50%;background:var(--line)}.dot.on{background:var(--pink)}
+.twister{background:rgba(255,255,255,.6);border:1px solid var(--line-soft);border-radius:14px;padding:14px;margin-top:10px}
+.vup{background:linear-gradient(180deg,rgba(255,255,255,.85),var(--plum-soft));border:1px solid rgba(150,130,200,.2);border-radius:14px;padding:14px;margin-top:10px}
+.vup .from{font-weight:700;font-size:19px;color:var(--plum)}.vup .arrow{color:var(--plum);margin:0 8px;font-weight:700}
+.shade-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.shade-btn{font:inherit;font-weight:500;font-size:12px;cursor:pointer;padding:6px 12px;border-radius:999px;border:1px solid rgba(150,130,200,.3);background:rgba(255,255,255,.8);color:var(--plum)}
+.shade-btn.on{background:var(--plum);color:#fff;border-color:transparent}
+.tier{margin-top:10px}.tier-lab{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--plum);margin-bottom:5px;letter-spacing:.05em}.tier-lab .lv{background:var(--plum);color:#fff;border-radius:5px;padding:2px 7px;font-size:9px}.tier-lab .lv.stretch{background:var(--pink)}
+.reveal{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px}
+.ptag{background:rgba(255,255,255,.85);border:1px solid rgba(150,130,200,.3);color:var(--plum);font-weight:600;font-size:13px;padding:5px 11px;border-radius:9px;cursor:pointer}
+.ptag:hover{background:var(--plum);color:#fff}
+.ladder{display:flex;flex-direction:column-reverse;gap:7px;margin-top:10px}
+.rung{border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.7);overflow:hidden}
+.rung summary{cursor:pointer;list-style:none;padding:12px 13px;font-weight:500;font-size:13.5px;display:flex;gap:10px;align-items:center}
+.rung summary::-webkit-details-marker{display:none}
+.rung .step{width:23px;height:23px;border-radius:7px;background:var(--mist);color:var(--violet);font-weight:700;font-size:11px;display:grid;place-items:center;flex:none}
+.rung[open]{border-color:var(--violet)}.rung[open] .step{background:var(--grad-d);color:#fff}
+.rung .detail{padding:0 13px 12px 46px;font-size:13px;color:var(--ink-soft)}
+.fm-grid{display:grid;gap:9px;margin-top:10px}
+.fm-box label{font-size:11px;font-weight:600;color:var(--teal);text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:4px}
+.fm-box .hint{color:var(--muted);font-weight:500;text-transform:none;letter-spacing:0;font-size:10.5px}
+.rec{background:rgba(255,255,255,.5);border:1px dashed var(--violet);border-radius:14px;padding:14px;margin-top:11px;text-align:center}
+.rec .opt{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--pink);font-weight:700}
+.rec-dot{width:10px;height:10px;border-radius:50%;background:#e0608f;display:inline-block;margin-right:7px}
+.rec-dot.live{animation:blink 1s infinite}@keyframes blink{50%{opacity:.25}}
+audio{width:100%;margin-top:10px}
+
+.bigword{font-weight:700;font-size:34px;background:linear-gradient(90deg,#E68FB8,#9B8FE0,#7FB0E6);-webkit-background-clip:text;background-clip:text;color:transparent;text-align:center;letter-spacing:-.02em;margin:6px 0}
+.scorebar{display:flex;gap:7px;margin-top:10px}
+.sc-b{flex:1;font:inherit;font-weight:600;font-size:13px;cursor:pointer;padding:10px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.8);color:var(--ink-soft);text-align:center}
+.sc-b.on{background:var(--grad-d);color:#fff;border-color:transparent}
+.moderow{display:flex;gap:7px;margin-top:11px}
+.modeb{flex:1;font:inherit;font-weight:600;font-size:12.5px;cursor:pointer;padding:9px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.8);color:var(--ink-soft)}
+.modeb.on{background:var(--grad-d);color:#fff;border-color:transparent}
+.catpills{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+input[type=number]{font:inherit;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.85);color:var(--ink);font-weight:700;font-size:18px}
+input[type=number]:focus{outline:none;border-color:var(--violet);box-shadow:0 0 0 3px rgba(185,138,224,.2)}
+
+.togs{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:14px}
+.tog{background:var(--paper-2);border:1px solid rgba(255,255,255,.6);border-radius:15px;padding:14px 8px;text-align:center;cursor:pointer;transition:.15s;box-shadow:var(--shadow)}
+.tog .ic{width:32px;height:32px;border-radius:50%;margin:0 auto 7px;display:grid;place-items:center;font-size:14px;transition:.15s}
+.tog .ic svg{width:19px;height:19px}
+.tog .ic i{font-size:14px}
+.tog.on .ic{background:var(--grad-d);color:#fff}.tog.off .ic{background:var(--mist);color:var(--muted)}
+.tog b{font-size:12px;display:block;font-weight:600}.tog span{font-size:9.5px;color:var(--muted)}
+.rate{margin-top:18px}
+.rate .rl{font-size:11.5px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.04em;display:block}
+.rl-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.rval{font-size:13.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.slider{-webkit-appearance:none;appearance:none;width:100%;height:10px;border-radius:999px;background:var(--track);outline:none;margin-top:11px;cursor:pointer}
+.slider.unset{opacity:.45;filter:grayscale(.4)}
+.slider::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--c,#fff);border:4px solid #fff;box-shadow:0 2px 8px rgba(120,90,170,.45);cursor:pointer}
+.slider::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--c,#fff);border:4px solid #fff;box-shadow:0 2px 8px rgba(120,90,170,.45);cursor:pointer}
+.slider.unset::-webkit-slider-thumb{background:#fff;border:4px solid #C3B7E0}
+.slider.unset::-moz-range-thumb{background:#fff;border:4px solid #C3B7E0}
+.ticks{display:flex;margin-top:8px}
+.ticks span{font-size:10px;color:var(--muted);font-weight:600;flex:1;text-align:center}
+.ticks span:first-child{text-align:left}.ticks span:last-child{text-align:right}
+.ticks span.on{font-weight:800}
+.rate-row{display:flex;gap:7px;margin-top:9px}
+.rb{font:inherit;font-weight:600;font-size:12.5px;cursor:pointer;padding:11px 6px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.8);color:var(--ink-soft);flex:1;text-align:center;transition:.13s}
+.rb:hover{border-color:var(--violet)}
+.rb.on{color:#fff;border-color:transparent}
+.rb.on[data-v="1"]{background:#F0B25A}.rb.on[data-v="2"]{background:#EE7AA8}.rb.on[data-v="3"]{background:#B98AE0}.rb.on[data-v="4"]{background:#7FA9E6}
+.rb.anx.on[data-v="1"]{background:#7FA9E6}.rb.anx.on[data-v="2"]{background:#B98AE0}.rb.anx.on[data-v="3"]{background:#EE7AA8}.rb.anx.on[data-v="4"]{background:#E07A55}
+.logdate{display:flex;align-items:center;gap:8px;margin-top:14px}
+.logdate .navbtn{font:inherit;font-weight:700;cursor:pointer;width:34px;height:34px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.7);color:var(--ink-soft)}
+.logdate .lbl{font-weight:600;font-size:15px;flex:1;text-align:center}
+
+.insight{background:linear-gradient(135deg,var(--sage),rgba(255,255,255,.85));border:1px solid rgba(127,169,230,.35);border-radius:15px;padding:14px 15px;margin-top:12px;font-size:13px}
+.insight b{color:var(--olive)}
+.chartcard{background:var(--paper-2);border:1px solid rgba(255,255,255,.6);border-radius:var(--r);padding:15px;margin-top:12px;box-shadow:var(--shadow);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.chartcard .ct2{font-size:12px;font-weight:600;color:var(--ink-soft);margin-bottom:10px;display:flex;justify-content:space-between}
+.bars{display:flex;align-items:flex-end;gap:4px;height:66px}
+.bars .col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px}
+.bars i{width:100%;border-radius:4px 4px 0 0;background:var(--grad-d);min-height:2px}
+.bars .xl{font-size:8px;color:var(--muted);font-variant-numeric:tabular-nums}
+.corr{display:flex;gap:12px;margin-top:6px}
+.corr .pair{flex:1;text-align:center;background:rgba(255,255,255,.6);border:1px solid var(--line-soft);border-radius:13px;padding:12px 8px}
+.corr .pair b{font-size:22px;font-weight:700;color:var(--violet);display:block;font-variant-numeric:tabular-nums}
+.corr .pair span{font-size:10px;color:var(--muted)}
+.calbar{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.seg{display:inline-flex;background:rgba(255,255,255,.66);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.seg button{font:inherit;font-weight:500;font-size:11.5px;cursor:pointer;padding:7px 11px;border:none;background:transparent;color:var(--ink-soft)}
+.seg button[aria-pressed="true"]{background:var(--grad-d);color:#fff}
+.navbtn{font:inherit;font-weight:700;cursor:pointer;width:34px;height:34px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.7);color:var(--ink-soft)}
+.callabel{font-weight:600;font-size:14px;flex:1;text-align:center;min-width:110px}
+.wk{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:5px}.wk span{text-align:center;font-size:9px;font-weight:700;color:var(--muted)}
+.grid7{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cell{height:32px;border-radius:7px;background:#EFEBF5;border:1px solid var(--line-soft);position:relative;cursor:pointer;display:grid;place-items:center;font-size:10px;font-weight:600;color:var(--muted)}
+.cell.empty{background:transparent;border:none;cursor:default}.cell.dark{color:#fff}
+.cell .exdot{position:absolute;top:3px;right:3px;width:5px;height:5px;border-radius:50%;background:var(--warm)}
+.cell.today{box-shadow:inset 0 0 0 2px var(--pink)}
+.legend{display:flex;gap:9px;margin-top:10px;flex-wrap:wrap;font-size:10.5px;color:var(--muted);align-items:center}
+.legend .sw{width:14px;height:14px;border-radius:5px;display:inline-block;vertical-align:middle;margin-right:3px}
+.qmonth{margin-bottom:12px}.qmonth .qm-lab{font-weight:600;font-size:12px;margin-bottom:5px}.qmonth .grid7{gap:3px}.qmonth .cell{font-size:0;border-radius:4px;height:15px}.qmonth .cell .exdot{width:3px;height:3px;top:2px;right:2px}
+.collgrid{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.collword{background:rgba(255,255,255,.85);border:1px solid rgba(150,130,200,.3);color:var(--plum);font-weight:500;font-size:12.5px;padding:5px 11px;border-radius:9px}
+
+.overlay{position:fixed;inset:0;background:rgba(80,60,110,.42);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);z-index:80;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.show{display:flex;animation:fadein .2s ease}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.sheet{background:linear-gradient(180deg,#FCF8FE,#F4F1FA);border-radius:26px;width:100%;max-width:460px;padding:24px 22px;box-shadow:0 24px 60px rgba(80,60,110,.32);animation:sheetpop .22s cubic-bezier(.2,.7,.3,1);max-height:88vh;overflow-y:auto}
+@keyframes sheetpop{from{transform:scale(.94);opacity:.4}to{transform:none;opacity:1}}
+.sheet h3{font-weight:600;font-size:21px;margin:0;text-align:center}
+.sheet p{font-size:13px;color:var(--ink-soft);text-align:center;margin:6px 0 16px}
+.difrow{display:flex;gap:7px}
+.dif-b{flex:1;font:inherit;font-weight:600;font-size:15px;cursor:pointer;padding:15px 0;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.85);color:var(--ink);transition:.13s}
+.dif-b:hover{border-color:var(--violet);background:#fff;transform:translateY(-1px)}
+.difscale{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:7px}
+.award{text-align:center;margin-top:16px}
+.award .pts{font-weight:700;font-size:30px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:45;background:rgba(252,250,255,.88);backdrop-filter:blur(22px) saturate(1.2);-webkit-backdrop-filter:blur(22px) saturate(1.2);border-top:1px solid rgba(255,255,255,.7);border-radius:26px 26px 0 0;box-shadow:0 -8px 32px rgba(150,130,200,.16);display:flex;align-items:center;padding:9px 16px calc(9px + env(safe-area-inset-bottom,0))}
+.tabbar button{flex:1;background:none;border:none;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center;padding:7px 0;transition:.14s}
+.tabbar button .ti2{width:42px;height:42px;display:grid;place-items:center;transition:.14s}
+.tabbar button .ti2 svg{width:36px;height:36px}
+.tabbar button .ti2 i{font-size:22px;line-height:1}
+.tabbar button[aria-current="true"]{color:var(--violet)}
+.tabbar button[aria-current="true"] .ti2{transform:translateY(-2px)}
+.tabbar .fab{flex:none;width:66px}
+.tabbar .fab .fabic{width:52px;height:52px;border-radius:50%;background:conic-gradient(from 210deg,#F6C76B,#EE7AA8,#B98AE0,#7FA9E6,#F6C76B);display:grid;place-items:center;color:#fff;box-shadow:0 8px 18px rgba(180,140,210,.45);transition:.16s}
+.tabbar .fab .fabic svg{width:25px;height:25px}
+.tabbar .fab .fabic i{font-size:22px;line-height:1;color:#fff}
+.tabbar .fab:active .fabic{transform:scale(.94)}
+.tabbar .fab[aria-current="true"] .fabic{transform:scale(1.05)}
+
+.banner{background:var(--coral-soft);border:1px solid rgba(232,111,166,.3);color:#9A3B6B;border-radius:14px;padding:12px 14px;font-size:12.5px;margin-top:12px}
+.finishcard{margin-top:14px;padding:18px;border-radius:var(--r);text-align:center;background:var(--grad-d);color:#fff;box-shadow:0 12px 30px rgba(185,138,224,.35)}
+.finishcard h3{margin:0 0 5px;font-size:18px;font-weight:600}.finishcard p{margin:0;font-size:13px;opacity:.94}
+.finishcard .btn2{font:inherit;font-weight:700;font-size:14px;cursor:pointer;margin-top:14px;padding:12px 24px;border-radius:13px;border:none;background:#fff;color:var(--pink);box-shadow:0 6px 16px rgba(0,0,0,.14);transition:.14s}
+.finishcard .btn2:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(0,0,0,.18)}
+.finishcard .btn2 span{display:block;font-size:11px;font-weight:600;opacity:.85;margin-top:2px;color:var(--violet)}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto}}
+</style>
+</helmet>
+<header>
+  <div class="head-row">
+    <div class="brand">
+      <div class="mark">S</div>
+      <div><h1>Speech Therapy</h1><p id="subtitle">Daily practice</p></div>
+    </div>
+    <div class="hchips">
+      <div class="hchip"><b id="hPts">0</b><span>Points</span></div>
+      <div class="hchip"><b id="hLvl">1</b><span>Level</span></div>
+      <div class="hchip"><b id="hStreak">0</b><span>Streak</span></div>
+    </div>
+  </div>
+</header>
+<main id="main"></main>
+
+<div class="overlay" id="overlay"><div class="sheet" id="sheet"></div></div>
+
+<nav class="tabbar" id="tabbar">
+  <button data-s="log" aria-label="Daily log"><span class="ti2"><svg viewBox="0 0 370 412" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M124.5 71.5C131 58.8 144.2 51 159 51h52c14.8 0 28 7.8 34.5 20.5H251c37.3 0 67.5 16.8 67.5 54.1v190.8c0 37.3-16.8 55.1-54.1 55.1H132.6c-37.3 0-54.1-17.8-54.1-55.1V125.6c0-37.3 30.2-54.1 67.5-54.1h-21.5Zm38.8 19.6a14.9 14.9 0 1 0 0 29.8h70.4a14.9 14.9 0 1 0 0-29.8h-70.4Zm94.9 94.2c-7.2-5.4-17.4-4-22.8 3.2l-54.6 72.7-15.5-16.2c-6.2-6.5-16.5-6.7-23-.5-6.5 6.2-6.7 16.5-.5 23l28.7 30c3.3 3.4 7.8 5.2 12.5 5 4.7-.3 9-2.6 11.8-6.4l66.6-88.1c5.4-7.2 4-17.4-3.2-22.7Z" clip-rule="evenodd"/></svg></span></button>
+  <button data-s="plan" aria-label="Daily speech therapy sessions"><span class="ti2"><svg viewBox="0 0 468 372" aria-hidden="true"><defs><mask id="mw-nav"><rect width="468" height="372" fill="white"/><g fill="none" stroke="black" stroke-linecap="round" stroke-width="60"><path d="M269.5 230v69.5"/><path d="M319.5 200v130"/><path d="M369.5 220v90"/></g></mask></defs><path fill="currentColor" mask="url(#mw-nav)" d="M134.5 25h200c33.1 0 60 26.9 60 60v140c0 33.1-26.9 60-60 60H225l-45.9 56.2c-9 8.2-24.6 1.8-24.6-10.3V285h-20c-33.1 0-60-26.9-60-60V85c0-33.1 26.9-60 60-60Z"/><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="30"><path d="M269.5 230v69.5"/><path d="M319.5 200v130"/><path d="M369.5 220v90"/><path d="M419.5 250v30"/></g></svg></span></button>
+  <button class="fab" data-s="home" aria-current="true" aria-label="Home"><span class="fabic"><svg viewBox="0 0 498 398" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M240.8 42.7a22 22 0 0 1 30.4 0l138.3 130.4c14.3 13.5 4.8 37.5-14.9 37.5h-7.8v105.7c0 25.1-18.6 40.7-40.7 40.7H166c-22.1 0-40.7-15.6-40.7-40.7V210.6h-8c-19.7 0-29.2-24-14.9-37.5L240.8 42.7Zm-24.3 224.7V327h80v-59.6c0-19.7-10.8-29.8-31.2-29.8h-17.6c-20.4 0-31.2 10.1-31.2 29.8Z" clip-rule="evenodd"/></svg></span></button>
+  <button data-s="games" aria-label="Mini-games"><span class="ti2"><svg viewBox="0 0 420 382" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M110.5 51h199c22.6 0 41 18.4 41 41v198c0 22.6-18.4 41-41 41h-199c-22.6 0-40-18.4-40-41V92c0-22.6 17.4-41 40-41Zm100 40h100v100h-100V91Zm-100 100h100v100h-100V191Z" clip-rule="evenodd"/></svg></span></button>
+  <button data-s="stats" aria-label="Progress"><span class="ti2"><svg viewBox="0 0 500 408" aria-hidden="true"><path fill="currentColor" d="M84.5 251.5c0-38.4 18.9-57.9 54.8-57.9h9.4c10.7 0 15.8 5.3 15.8 16.1v127.2c0 10.8-5.1 16.1-15.8 16.1h-9.4c-35.9 0-54.8-19.5-54.8-57.9v-43.6Z"/><path fill="currentColor" d="M196.5 99.5c0-34.1 13.6-50.5 47.9-50.5h.2c34.3 0 47.9 16.4 47.9 50.5v237.4c0 10.8-5.3 16.1-16.1 16.1h-63.8c-10.8 0-16.1-5.3-16.1-16.1V99.5Z"/><path fill="currentColor" d="M324.5 145.5c0-10.8 5.1-16.1 15.8-16.1h9.4c35.9 0 54.8 19.5 54.8 57.9v107.8c0 38.4-18.9 57.9-54.8 57.9h-9.4c-10.7 0-15.8-5.3-15.8-16.1V145.5Z"/></svg></span></button>
+</nav>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;vibrancy&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;soft&quot;, &quot;vivid&quot;, &quot;mono&quot;], &quot;default&quot;: &quot;soft&quot;, &quot;tsType&quot;: &quot;string&quot;},
+  &quot;wash&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;blush&quot;, &quot;sunrise&quot;, &quot;sky&quot;], &quot;default&quot;: &quot;blush&quot;, &quot;tsType&quot;: &quot;string&quot;},
+  &quot;surface&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;frosted&quot;, &quot;solid&quot;], &quot;default&quot;: &quot;frosted&quot;, &quot;tsType&quot;: &quot;string&quot;},
+  &quot;corners&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;rounded&quot;, &quot;pillowy&quot;, &quot;crisp&quot;], &quot;default&quot;: &quot;rounded&quot;, &quot;tsType&quot;: &quot;string&quot;},
+  &quot;depth&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;soft&quot;, &quot;lifted&quot;, &quot;flat&quot;], &quot;default&quot;: &quot;soft&quot;, &quot;tsType&quot;: &quot;string&quot;},
+  &quot;density&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;cozy&quot;, &quot;compact&quot;], &quot;default&quot;: &quot;cozy&quot;, &quot;tsType&quot;: &quot;string&quot;},
+  &quot;glow&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;}
+}">
+class Component extends DCLogic {
+  applyTheme() {
+    var r = document.documentElement;
+    r.setAttribute('data-vibe', this.props.vibrancy || 'soft');
+    r.setAttribute('data-surface', this.props.surface || 'frosted');
+    r.setAttribute('data-wash', this.props.wash || 'blush');
+    r.setAttribute('data-corners', this.props.corners || 'rounded');
+    r.setAttribute('data-depth', this.props.depth || 'soft');
+    r.setAttribute('data-density', this.props.density || 'cozy');
+    r.setAttribute('data-glow', this.props.glow ? 'on' : 'off');
+  }
+  componentDidMount() {
+    this.applyTheme();
+    try { this.runApp(); } catch (e) { console.error('Speech Therapy init failed', e); }
+  }
+  componentDidUpdate() { this.applyTheme(); }
+  runApp() {
+var tb=document.getElementById('tabbar'); if(!tb||tb.dataset.fwReady)return; tb.dataset.fwReady='1';
+  function gaugeSVG(pct,big,sub){pct=Math.max(0,Math.min(100,pct));var r=85,cx=110,cy=110;var ang=Math.PI*(1-pct/100);var ex=cx+r*Math.cos(ang),ey=cy-r*Math.sin(ang);var arc=pct<=0?'':'<path d="M25,110 A85,85 0 0 1 '+ex.toFixed(1)+','+ey.toFixed(1)+'" fill="none" stroke="url(#fwg)" stroke-width="14" stroke-linecap="round"/>';return '<svg viewBox="0 0 220 130" width="150" height="89"><defs><linearGradient id="fwg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#F6C76B"/><stop offset=".4" stop-color="#EE7AA8"/><stop offset=".7" stop-color="#B98AE0"/><stop offset="1" stop-color="#7FA9E6"/></linearGradient></defs><path d="M25,110 A85,85 0 0 1 195,110" fill="none" stroke="#ECE7F4" stroke-width="14" stroke-linecap="round"/>'+arc+'<text x="110" y="95" text-anchor="middle" font-size="30" font-weight="600" fill="#3a3550" font-family="Nunito, system-ui, sans-serif">'+big+'</text><text x="110" y="115" text-anchor="middle" font-size="12" fill="#9a93b4" font-family="Nunito, system-ui, sans-serif">'+sub+'</text></svg>';}
+
+
+const ICONS={
+ sessions:'<svg viewBox="0 0 468 372" aria-hidden="true"><defs><mask id="mw-tile"><rect width="468" height="372" fill="white"/><g fill="none" stroke="black" stroke-linecap="round" stroke-width="60"><path d="M269.5 230v69.5"/><path d="M319.5 200v130"/><path d="M369.5 220v90"/></g></mask></defs><path fill="currentColor" mask="url(#mw-tile)" d="M134.5 25h200c33.1 0 60 26.9 60 60v140c0 33.1-26.9 60-60 60H225l-45.9 56.2c-9 8.2-24.6 1.8-24.6-10.3V285h-20c-33.1 0-60-26.9-60-60V85c0-33.1 26.9-60 60-60Z"/><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="30"><path d="M269.5 230v69.5"/><path d="M319.5 200v130"/><path d="M369.5 220v90"/><path d="M419.5 250v30"/></g></svg>',
+ spark:'<svg viewBox="0 0 420 382" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M110.5 51h199c22.6 0 41 18.4 41 41v198c0 22.6-18.4 41-41 41h-199c-22.6 0-40-18.4-40-41V92c0-22.6 17.4-41 40-41Zm100 40h100v100h-100V91Zm-100 100h100v100h-100V191Z" clip-rule="evenodd"/></svg>',
+ check:'<svg viewBox="0 0 370 412" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M124.5 71.5C131 58.8 144.2 51 159 51h52c14.8 0 28 7.8 34.5 20.5H251c37.3 0 67.5 16.8 67.5 54.1v190.8c0 37.3-16.8 55.1-54.1 55.1H132.6c-37.3 0-54.1-17.8-54.1-55.1V125.6c0-37.3 30.2-54.1 67.5-54.1h-21.5Zm38.8 19.6a14.9 14.9 0 1 0 0 29.8h70.4a14.9 14.9 0 1 0 0-29.8h-70.4Zm94.9 94.2c-7.2-5.4-17.4-4-22.8 3.2l-54.6 72.7-15.5-16.2c-6.2-6.5-16.5-6.7-23-.5-6.5 6.2-6.7 16.5-.5 23l28.7 30c3.3 3.4 7.8 5.2 12.5 5 4.7-.3 9-2.6 11.8-6.4l66.6-88.1c5.4-7.2 4-17.4-3.2-22.7Z" clip-rule="evenodd"/></svg>',
+ bars:'<svg viewBox="0 0 500 408" aria-hidden="true"><path fill="currentColor" d="M84.5 251.5c0-38.4 18.9-57.9 54.8-57.9h9.4c10.7 0 15.8 5.3 15.8 16.1v127.2c0 10.8-5.1 16.1-15.8 16.1h-9.4c-35.9 0-54.8-19.5-54.8-57.9v-43.6Z"/><path fill="currentColor" d="M196.5 99.5c0-34.1 13.6-50.5 47.9-50.5h.2c34.3 0 47.9 16.4 47.9 50.5v237.4c0 10.8-5.3 16.1-16.1 16.1h-63.8c-10.8 0-16.1-5.3-16.1-16.1V99.5Z"/><path fill="currentColor" d="M324.5 145.5c0-10.8 5.1-16.1 15.8-16.1h9.4c35.9 0 54.8 19.5 54.8 57.9v107.8c0 38.4-18.9 57.9-54.8 57.9h-9.4c-10.7 0-15.8-5.3-15.8-16.1V145.5Z"/></svg>'
+};
+const MAXLVL=30;
+/* Cumulative points to REACH each level (index 0 = level 1). Fast early, steep late;
+   ~75k at level 30 ≈ all daily activities for ~6 months. */
+const LV_CUM=[0,25,75,200,425,775,1250,1875,2625,3575,4700,6025,7575,9300,11300,13500,15975,18700,21700,24975,28550,32400,36575,41050,45850,50975,56450,62275,68450,75000];
+const LEVEL_TITLES=['First Words','Finding Flow','Word Explorer','Clear Speaker','Story Weaver','Word Smith','Fluent Voice','Master Communicator'];
+function levelTitle(lv){var idx=Math.floor((Math.min(Math.max(lv,1),MAXLVL)-1)/MAXLVL*LEVEL_TITLES.length);return LEVEL_TITLES[Math.min(idx,LEVEL_TITLES.length-1)];}
+const FACTS=[
+ 'Naming things out loud strengthens the very pathways you use to find them.',
+ 'Short daily practice beats rare marathons for word recall.',
+ "Can't find a word? Describe it \u2014 staying in the conversation is the real skill.",
+ 'Reading aloud exercises memory and speech at the same time.',
+ 'A foggy day is data, not failure. Log it and keep going.',
+ 'Slow and clear always beats fast and tangled.',
+ 'Sleep and protein quietly shape how sharp your words feel.',
+ "Every word you practice today is one you'll reach for faster tomorrow."
+];
+function todayFact(){return FACTS[Math.floor(Date.now()/8.64e7)%FACTS.length];}
+
+/* ================= STORE ================= */
+const KEY='findingwords_v3';
+let persistOK=true;
+let DB={logs:{},collected:[],points:0,exDiff:{},planDone:{},bestFluency:0,daysCompleted:0};
+(function(){try{const r=localStorage.getItem(KEY);if(r)DB=Object.assign(DB,JSON.parse(r));localStorage.setItem(KEY+'_t','1');localStorage.removeItem(KEY+'_t');}catch(e){persistOK=false;}})();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){persistOK=false;}}
+function exportData(){try{var payload={app:'speech-therapy',version:'v3',exportedAt:new Date().toISOString(),data:DB};var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='speech-therapy-backup-'+todayKey()+'.json';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(url);a.remove();},120);return true;}catch(e){return false;}}
+function importData(file,cb){var r=new FileReader();r.onload=function(){try{var parsed=JSON.parse(r.result);var incoming=(parsed&&parsed.data&&typeof parsed.data==='object')?parsed.data:parsed;if(!incoming||typeof incoming!=='object'||!('logs' in incoming)||!('points' in incoming)){cb(false,"That file doesn’t look like a Speech Therapy backup.");return;}var fresh={logs:{},collected:[],points:0,exDiff:{},planDone:{},dayBanked:{},bestFluency:0,daysCompleted:0};DB=Object.assign(fresh,incoming);save();updateHeader();cb(true,'Imported '+Object.keys(DB.logs||{}).length+' logged day(s) and '+(DB.points||0)+' points.');}catch(e){cb(false,"Couldn’t read that file — make sure it’s a backup .json.");}};r.onerror=function(){cb(false,'Could not read that file.');};r.readAsText(file);}
+function k(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function todayKey(){return k(new Date());}
+function parseK(key){const[a,b,c]=key.split('-').map(Number);return new Date(a,b-1,c);}
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const RLAB=['—','Tough','Okay','Good','Sharp'];
+const ALAB=['—','Calm','Mild','High','Severe'];
+const RCOL=['#EFEBF5','#F6D6E6','#E3CCF2','#C3AEEA','#9B8FE0'];
+function getLog(key){return DB.logs[key]||null;}
+function ensureLog(key){if(!DB.logs[key])DB.logs[key]={mem:0,speech:0,anx:0,meds:false,protein:false,sedative:false,note:'',done:false};return DB.logs[key];}
+function setLog(key,patch){const L=ensureLog(key);Object.assign(L,patch);save();}
+function streakCount(){let d=new Date();const has=key=>{const L=DB.logs[key];return L&&(L.done||L.mem||L.speech||L.meds||L.protein);};if(!has(todayKey()))d.setDate(d.getDate()-1);let n=0;while(has(k(d))){n++;d.setDate(d.getDate()-1);}return n;}
+function level(){var p=DB.points;for(var L=MAXLVL;L>=1;L--){if(p>=LV_CUM[L-1])return L;}return 1;}
+function levelFloor(L){return LV_CUM[Math.min(Math.max(L,1),MAXLVL)-1];}
+function levelCeil(L){return L>=MAXLVL?LV_CUM[MAXLVL-1]:LV_CUM[L];}
+function fluencyTarget(){return Math.min(30,12+Math.floor((level()-1)/3)*2);}
+function addPoints(n){DB.points+=n;save();updateHeader();}
+function recordCompletion(id,name,diff){const key=todayKey();if(!DB.exDiff[key])DB.exDiff[key]=[];DB.exDiff[key].push({id,name,diff,t:Date.now()});const pts=30+diff*5;addPoints(pts);return pts;}
+
+/* ================= CONTENT ================= */
+const UPGRADES={
+ "nice":[{shade:"kind / warm",reach:["gracious","considerate","warm-hearted"],stretch:["benevolent","magnanimous"]},{shade:"pleasant",reach:["lovely","delightful","enjoyable"],stretch:["sublime","idyllic"]},{shade:"agreeable",reach:["amiable","affable","congenial"],stretch:["genial","convivial"]}],
+ "good":[{shade:"high quality",reach:["excellent","superb","first-rate"],stretch:["exceptional","sterling"]},{shade:"skilled",reach:["accomplished","adept","proficient"],stretch:["masterful","consummate"]},{shade:"enjoyable",reach:["satisfying","delightful","rewarding"],stretch:["sublime","gratifying"]}],
+ "said":[{shade:"neutral",reach:["noted","remarked","observed"],stretch:["articulated","conveyed"]},{shade:"argued",reach:["argued","asserted","maintained"],stretch:["contended","posited"]},{shade:"softly",reach:["murmured","offered","ventured"],stretch:["intimated","confided"]}],
+ "happy":[{shade:"content",reach:["content","pleased","glad"],stretch:["gratified","serene"]},{shade:"very happy",reach:["delighted","thrilled","elated"],stretch:["overjoyed","jubilant"]}],
+ "make":[{shade:"create",reach:["create","build","produce"],stretch:["craft","fashion"]},{shade:"cause",reach:["cause","prompt","bring about"],stretch:["engender","precipitate"]}],
+ "thing":[{shade:"object",reach:["object","item","article"],stretch:["element","artifact"]},{shade:"topic",reach:["matter","issue","subject"],stretch:["aspect","consideration"]}],
+ "talk":[{shade:"converse",reach:["converse","chat","discuss"],stretch:["confer","exchange views"]},{shade:"speak formally",reach:["address","present","brief"],stretch:["expound","hold forth"]}],
+ "but":[{shade:"contrast",reach:["however","yet","whereas"],stretch:["conversely","by contrast"]},{shade:"concession",reach:["although","even so","still"],stretch:["nevertheless","notwithstanding"]}],
+ "big":[{shade:"large",reach:["large","sizable","substantial"],stretch:["immense","colossal"]},{shade:"important",reach:["major","significant","considerable"],stretch:["momentous","monumental"]}],
+ "small":[{shade:"little",reach:["little","compact","modest"],stretch:["diminutive","minuscule"]},{shade:"unimportant",reach:["minor","slight","trivial"],stretch:["negligible","inconsequential"]}],
+ "walk":[{shade:"casual",reach:["stroll","amble","wander"],stretch:["saunter","meander"]},{shade:"with purpose",reach:["stride","march","pace"],stretch:["press on","forge ahead"]}],
+ "look":[{shade:"glance",reach:["glance","peek","glimpse"],stretch:["scan","skim"]},{shade:"stare",reach:["gaze","watch","observe"],stretch:["scrutinize","contemplate"]}],
+ "very":[{shade:"intensifier",reach:["highly","deeply","truly"],stretch:["exceedingly","remarkably"]},{shade:"extremely",reach:["extremely","intensely","thoroughly"],stretch:["profoundly","immensely"]}],
+ "important":[{shade:"significant",reach:["significant","major","key"],stretch:["pivotal","paramount"]},{shade:"urgent",reach:["pressing","critical","vital"],stretch:["imperative","crucial"]}],
+ "fast":[{shade:"quick",reach:["quick","rapid","swift"],stretch:["brisk","fleet"]},{shade:"sudden",reach:["sudden","instant","abrupt"],stretch:["instantaneous","precipitous"]}],
+ "old":[{shade:"aged",reach:["elderly","aged","mature"],stretch:["venerable","ancient"]},{shade:"former",reach:["former","previous","prior"],stretch:["erstwhile","bygone"]}]
+};
+/* 14 agendas: Week A (0–6) + Week B (7–13). The app alternates weeks so no
+   agenda repeats within 14 days. Each day = a sound focus with 5 matched twisters. */
+const DAYS=[
+ /* ===== WEEK A ===== */
+ {key:"Sibilants & shine",sound:"/s/ and /sh/",twisters:["She sells seashells by the seashore.","Sally swiftly shooed seven silly sheep.","Sunny soldiers share shiny silver spoons.","Sasha shovels slushy snow super smoothly.","The sixth sheep's shears sit by the shore."],vocabTheme:"Vivid adjectives",upgrades:["nice","good"],wod:{w:"Luminous",def:"giving off light; radiant."},find:"fluency",builder:"expand"},
+ {key:"Plosive power",sound:"/p/ /b/ /t/ /d/",twisters:["Peter Piper picked a peck of pickled peppers.","Betty bought a bit of better butter.","A proper copper coffee pot.","Big black bugs bleed blue-black blood.","Ted prodded the dotted board, bored but dutiful."],vocabTheme:"Strong verbs",upgrades:["said","make"],wod:{w:"Galvanize",def:"to rouse into action."},find:"featuremap",builder:"prep"},
+ {key:"Liquid runs",sound:"/r/ and /l/",twisters:["Red lorry, yellow lorry, red lorry, yellow lorry.","Round the rugged rock the ragged rascal ran.","Larry rarely reads really long letters.","Lovely lemon liniment, lovely lemon liniment.","Truly rural roller railways run reliably."],vocabTheme:"Professional words",upgrades:["make","talk"],wod:{w:"Leverage",def:"to use to maximum advantage."},find:"cueladder",builder:"threebullet"},
+ {key:"Back sounds",sound:"/k/ and /g/",twisters:["How much wood would a woodchuck chuck?","Cooks quickly cook crisp cupcakes.","Great gray geese grazed gladly.","Gobbling gargoyles gobbled greedy goblins.","A quick-witted cricket critic clicked quickly."],vocabTheme:"Precise feelings",upgrades:["happy"],wod:{w:"Apprehensive",def:"anxious something bad will happen."},find:"assoc",builder:"expand"},
+ {key:"Fricative finesse",sound:"/th/ /f/ /v/",twisters:["Three thin thieves thought a thousand thoughts.","Fred fed Ted bread, and Ted fed Fred bread.","Vivid violets vie for very fine views.","The father's thirty-three thick thumbs.","Five fine fresh fish for Phoebe to fry."],vocabTheme:"Connectors",upgrades:["but"],wod:{w:"Nevertheless",def:"in spite of that."},find:"talkaround",builder:"prep"},
+ {key:"Chip & jump",sound:"/ch/ /j/ /sh/",twisters:["Cheap ship trips, cheap ship trips.","Which witch wished which wicked wish?","Jolly juggling jesters jingle jauntily.","Chop shops stock chops; chop shops stock chops.","Fresh fried fish, fresh fried fish."],vocabTheme:"Action verbs",upgrades:["make","fast"],wod:{w:"Momentum",def:"force gained by movement."},find:"featuremap",builder:"retell"},
+ {key:"Cluster control",sound:"blends /st/ /str/ /spl/ /spr/",twisters:["Six strong stout soldiers stood still.","Strange strategic strolls stress strikers.","Splendid splashing springs sprinkle sprouts.","Stop spreading streaky strawberry streaks.","Crisp crusts crackle, crisp crusts crackle."],vocabTheme:"Your collected words",upgrades:["thing"],wod:{w:"Articulate",def:"to express yourself clearly."},find:"fluency",builder:"summary"},
+ /* ===== WEEK B ===== */
+ {key:"Buzz & hiss",sound:"/s/ vs /z/",twisters:["Zebras zigzag, zebras zigzag, zigzag zebras.","Sue's zoo has zany zebras and busy bees.","The buzzing bees seize the breezy daisies.","Six slippery snails slid slowly seaward.","Roses are red, zinnias are amazing."],vocabTheme:"Sensory words",upgrades:["nice","big"],wod:{w:"Vivid",def:"producing strong, clear images."},find:"assoc",builder:"expand"},
+ {key:"The mighty R",sound:"/r/ initial, medial & r-vowels",twisters:["Round the rugged rocks the ragged rascals roam.","Robert's rabbit ran around the rural road.","Rory's roaring lorry rarely arrives early.","Bright trucks grow over rough gravel roads.","Carrie's curly hair carries far and wide."],vocabTheme:"Travel & place words",upgrades:["walk","look"],wod:{w:"Itinerary",def:"a planned route or journey."},find:"cueladder",builder:"threebullet"},
+ {key:"Light & dark L",sound:"/l/ + blends bl cl fl gl pl sl",twisters:["Little lucky Lily licks lollipops slowly.","Blue glue, blue glue, gleaming blue glue.","Please place plump plums in plain plates.","Flat flowers float, flat flowers float.","Slick sleds slide silently downhill."],vocabTheme:"Descriptive adjectives",upgrades:["small","old"],wod:{w:"Pristine",def:"clean and untouched."},find:"featuremap",builder:"prep"},
+ {key:"Nasal tune",sound:"/m/ /n/ /ng/",twisters:["Many merry men make money mornings.","Nine nimble noblemen nibbled nuts.","Singing swingers bring ringing springs.","Mama made me mash my mini marshmallows.","The morning gong rang long and strong."],vocabTheme:"Feeling words",upgrades:["happy","very"],wod:{w:"Serene",def:"calm and untroubled."},find:"talkaround",builder:"retell"},
+ {key:"Glides & W",sound:"/w/ vs /r/ and /y/",twisters:["Which wristwatch is a Swiss wristwatch?","Wayne went west while we waited.","Yellow yo-yos, yellow yo-yos, you win.","We were weary while we wandered westward.","Round red wagons roll west, round red wagons roll."],vocabTheme:"Everyday verbs",upgrades:["walk","talk"],wod:{w:"Wander",def:"to move without a fixed course."},find:"fluency",builder:"expand"},
+ {key:"Soft & hard",sound:"soft & hard C and G",twisters:["Gentle giants guard the gigantic garden gate.","Cecilia's circle of cynical cyclists.","Cool cats cackle, gentle gems gleam.","George's gorgeous garage gadgets.","Crisp celery, gentle ginger, cold cider."],vocabTheme:"Precise nouns",upgrades:["thing","important"],wod:{w:"Equilibrium",def:"a state of balance."},find:"featuremap",builder:"prep"},
+ {key:"Free flow & review",sound:"mixed — your choice",twisters:["Pick your toughest twister and beat your fastest clean run.","Slow first, then build speed — clean beats fast.","Unique New York, unique New York, you know you need unique New York.","Red leather, yellow leather, red leather, yellow leather.","A big black bear sat on a big black rug."],vocabTheme:"Your collected words",upgrades:["good","very"],wod:{w:"Eloquent",def:"fluent and persuasive in speech."},find:"assoc",builder:"summary"}
+];
+const WEEKDAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const WEEKDAYS_SHORT=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+/* Week parity from a known Sunday (Jan 7 2024) — alternates Week A / Week B */
+function weekParity(d){const ref=new Date(2024,0,7);const day0=new Date(d.getFullYear(),d.getMonth(),d.getDate());const weeks=Math.floor(Math.round((day0-ref)/86400000)/7);return ((weeks%2)+2)%2;}
+function agendaIdxFor(weekday){return weekParity(new Date())*7+weekday;}
+const TALK_WORDS=["colander","thermometer","stapler","umbrella","escalator","compass","whisk","ladder","funnel","corkscrew","binoculars","kettle","hinge","pulley","sieve"];
+function dayIndex(){return Math.floor(Date.now()/8.64e7);}
+/* PREP — a daily prompt to recall a real topic/situation from your day (1 of 7) */
+const PREP_PROMPTS=[
+ "a conversation you had today",
+ "something that surprised you today",
+ "a decision you made today — big or small",
+ "a small win from today",
+ "something that frustrated you today",
+ "a task you finished today",
+ "something you noticed or learned today"
+];
+function todayPrepPrompt(){return PREP_PROMPTS[dayIndex()%PREP_PROMPTS.length];}
+/* Mouth & Breath — 3 rotating versions so you're not doing the same sounds daily */
+const WARMUPS=[
+ {items:["Lip trills — “brrr”, 3×","Big “lion mouth” open + scrunch, 3×","Tongue: touch each corner of your mouth","Jaw: gentle wide “ahh”, 3×","“Pa-Ta-Ka” — slow then faster, 5×","Two deep belly breaths, sigh out"],drill:"Pa · Ta · Ka · Pataka Pataka Pataka",note:"Crisp and even. Speed up only while every sound stays clean."},
+ {items:["Hum up and down a scale, 3×","Lip trills gliding high to low, 3×","Tongue: push into each cheek, 5×","Exaggerate “oo – ee” stretches, 5×","“Buh-Duh-Guh” — slow then faster, 5×","Big yawn-sigh, 2×"],drill:"Buh · Duh · Guh · Buhduhguh Buhduhguh",note:"Voice the back of the mouth. Keep each release clean."},
+ {items:["Blow out slowly through pursed lips, 3×","“La-La-La” tapping your tongue tip, 5×","Wide smile to tight pout, 5×","Click your tongue, 5×","“Ka-La-Ta” — slow then faster, 5×","Two deep belly breaths, sigh out"],drill:"Ka · La · Ta · Kalata Kalata Kalata",note:"Front-to-back agility. Slow until every sound lands."}
+];
+/* Fluency Sprint — 15 categories, 2 served per day */
+const FLU_CATS=["animals","foods in a kitchen","countries","sports","jobs or professions","fruits & vegetables","things that are cold","clothing","things with wheels","musical instruments","things in nature","action verbs","cities","round things","things in this room"];
+function fluCatsToday(){const di=dayIndex();return [FLU_CATS[(di*2)%FLU_CATS.length],FLU_CATS[(di*2+1)%FLU_CATS.length]];}
+/* Sentence Builder — one general set then a harder set, 2 per day */
+const SENT_GENERAL=["dog · rain · window","coffee · meeting · idea","river · bridge · morning","book · lamp · question","garden · letter · afternoon","train · music · stranger","kitchen · phone · neighbor"];
+const SENT_CHALLENGE=["decision · although · consequence · eventually","memory · despite · gradually · perspective","opportunity · however · commitment · outcome","tradition · whereas · meaningful · community","progress · nevertheless · obstacle · patience","conflict · because · resolution · honestly","change · until · responsibility · ultimately"];
+function sentSetsToday(){const di=dayIndex();return {gen:SENT_GENERAL[di%SENT_GENERAL.length],chal:SENT_CHALLENGE[di%SENT_CHALLENGE.length]};}
+/* Feature Map — semi-complex words to practice when you don't have your own */
+const FEATURE_WORDS=["thermostat","compromise","negotiate","perspective","irrigation","scaffold","momentum","hypothesis","calibrate","itinerary","equilibrium","metaphor","circulation","leverage","threshold","catalyst","reservoir","inventory","mechanism","horizon"];
+
+/* ================= EXERCISE WIDGETS ================= */
+function wrapGame(el){const g=document.createElement('div');g.className='gamebox';g.appendChild(el);return g;}
+function fluencyGame(ctx){
+  const w=document.createElement('div');w.className='gamebox';
+  const cats=fluCatsToday();
+  w.innerHTML='<p class="lead">Two categories today — tap one, start the 60-second timer, and name as many as you can.</p>'+
+   '<div class="catpills"></div>'+
+   '<label class="fld" style="margin-top:11px">Category or letter</label><input type="text" class="cat" placeholder="or type your own…">'+
+   '<div class="moderow"><button class="modeb on" data-m="type">Type each word</button><button class="modeb" data-m="count">Count in my head</button></div>'+
+   '<div class="mtimer"><div class="clock">0:60</div><button class="btn sm start">Start 60s</button><span class="count-big cnt">0</span></div>'+
+   '<div class="typemode"><input type="text" class="word" placeholder="Type a word, press Enter…" style="margin-top:11px" disabled><div class="chips"></div></div>'+
+   '<div class="countmode" style="display:none"><label class="fld" style="margin-top:11px">Your total</label><div style="display:flex;gap:8px;align-items:center"><button class="btn ghost sm minus" type="button">−</button><input type="number" class="num" value="0" min="0" style="text-align:center;max-width:96px"><button class="btn ghost sm plus" type="button">+</button></div><div class="note"><span class="d"></span><span>Run through the category in your head, then enter or tap your total. It logs when the timer ends.</span></div></div>'+
+   '<div class="best">Level '+level()+' target: <b>'+fluencyTarget()+'</b> · Best: <b class="bv">'+DB.bestFluency+'</b></div>';
+  const catInput=w.querySelector('.cat'),pillwrap=w.querySelector('.catpills');
+  cats.forEach(c=>{const b=document.createElement('button');b.className='shade-btn';b.textContent=c;b.addEventListener('click',()=>{catInput.value=c;pillwrap.querySelectorAll('.shade-btn').forEach(x=>x.classList.remove('on'));b.classList.add('on');});pillwrap.appendChild(b);});
+  let mode='type';
+  const modeBtns=w.querySelectorAll('.modeb'),typeMode=w.querySelector('.typemode'),countMode=w.querySelector('.countmode'),num=w.querySelector('.num');
+  modeBtns.forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.m;modeBtns.forEach(x=>x.classList.toggle('on',x===b));typeMode.style.display=mode==='type'?'':'none';countMode.style.display=mode==='count'?'':'none';cnt.textContent=mode==='count'?(parseInt(num.value)||0):'0';}));
+  const clk=w.querySelector('.clock'),st=w.querySelector('.start'),cnt=w.querySelector('.cnt'),word=w.querySelector('.word'),chips=w.querySelector('.chips'),bv=w.querySelector('.bv');
+  function syncBest(v){if(v>DB.bestFluency){DB.bestFluency=v;bv.textContent=v;save();}}
+  w.querySelector('.minus').addEventListener('click',()=>{num.value=Math.max(0,(parseInt(num.value)||0)-1);cnt.textContent=num.value;syncBest(parseInt(num.value)||0);});
+  w.querySelector('.plus').addEventListener('click',()=>{num.value=(parseInt(num.value)||0)+1;cnt.textContent=num.value;syncBest(parseInt(num.value)||0);});
+  num.addEventListener('input',()=>{cnt.textContent=parseInt(num.value)||0;syncBest(parseInt(num.value)||0);});
+  let t=60,c=0,iv=null,run=false;
+  st.addEventListener('click',()=>{if(run)return;c=0;chips.innerHTML='';if(mode==='count'){num.value=0;}cnt.textContent=0;t=60;clk.textContent='0:60';clk.classList.add('run');run=true;if(mode==='type'){word.disabled=false;word.focus();}st.disabled=true;st.textContent='Running…';iv=setInterval(()=>{t--;clk.textContent='0:'+String(t).padStart(2,'0');if(t<=0){clearInterval(iv);run=false;clk.classList.remove('run');clk.textContent='0:00';word.disabled=true;st.disabled=false;st.textContent='Start again';const finalC=mode==='count'?(parseInt(num.value)||0):c;syncBest(finalC);const m=document.createElement('div');m.className='best';m.style.color='var(--teal)';m.innerHTML=finalC>=fluencyTarget()?'Hit your target — '+finalC+' words!':'Nice — '+finalC+' words. Run it again.';w.querySelector('.best').after(m);}},1000);});
+  word.addEventListener('keydown',e=>{if(e.key==='Enter'&&word.value.trim()&&run){const s=document.createElement('span');s.className='chip';s.textContent=word.value.trim();chips.appendChild(s);c++;cnt.textContent=c;word.value='';}});
+  return w;
+}
+function talkAround(ctx){
+  const w=document.createElement('div');w.className='gamebox';
+  let pool=TALK_WORDS.slice().sort(()=>Math.random()-0.5),idx=0,score=0;
+  w.innerHTML='<p class="lead">Describe the word out loud <b>without saying it</b> — like you would if it vanished mid-sentence. Then reveal and move on. This is the keep-talking skill.</p><div class="bigword"></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm rev">Reveal & I described it ✓</button><button class="btn ghost sm skip">Skip</button></div><div class="best">Described: <b class="dsc">0</b></div>';
+  const bw=w.querySelector('.bigword'),rev=w.querySelector('.rev'),skip=w.querySelector('.skip'),dsc=w.querySelector('.dsc');
+  function show(){bw.textContent=pool[idx%pool.length];bw.style.filter='none';rev.textContent='Reveal & I described it ✓';}
+  bw.dataset.hidden='0';show();bw.style.filter='blur(8px)';rev.textContent='Show the word';
+  rev.addEventListener('click',()=>{if(bw.style.filter!=='none'){bw.style.filter='none';rev.textContent='I described it ✓ — next';}else{score++;dsc.textContent=score;idx++;show();bw.style.filter='blur(8px)';rev.textContent='Show the word';}});
+  skip.addEventListener('click',()=>{idx++;show();bw.style.filter='blur(8px)';rev.textContent='Show the word';});
+  return w;
+}
+function featureMap(ctx){const B=[["Group","what kind of thing?","a tool"],["Use","what do you do with it?","drive nails"],["Action","how does it move?","swings, hits"],["Properties","size, color, parts?","heavy, metal head"],["Where","where do you find it?","toolbox"]];const w=document.createElement('div');w.className='gamebox';w.innerHTML='<p class="lead">Pick a word you got stuck on — or generate one to practice. Fill what you know; it surfaces the word and strengthens the path.</p><label class="fld">Target word</label><input type="text" class="target" placeholder="a word you forgot recently"><button class="btn ghost sm gen" type="button" style="margin-top:8px"><i class="fa-solid fa-shuffle"></i> Generate a word</button><div class="fm-grid"></div>';const g=w.querySelector('.fm-grid'),tgt=w.querySelector('.target');w.querySelector('.gen').addEventListener('click',()=>{tgt.value=FEATURE_WORDS[Math.floor(Math.random()*FEATURE_WORDS.length)];tgt.focus();});B.forEach(b=>{const d=document.createElement('div');d.className='fm-box';d.innerHTML='<label>'+b[0]+' <span class="hint">— '+b[1]+'</span></label><input type="text" placeholder="e.g. '+b[2]+'">';g.appendChild(d);});return w;}
+function cueLadder(ctx){const R=[["1","First sound","“It starts with /p/…”","→ pencil"],["2","Syllables","Clap it — “two beats…”","→ ta-ble"],["3","Rhyme","“It rhymes with…”","→ cat / hat"],["4","Category","“It's a kind of…”","→ a tool"],["5","Frame it","Drop it in a sentence","→ I cut paper with ___"]];const w=document.createElement('div');w.className='gamebox';const lad=document.createElement('div');lad.className='ladder';R.forEach(r=>{const d=document.createElement('details');d.className='rung';d.open=true;d.innerHTML='<summary><span class="step">'+r[0]+'</span>'+r[1]+'</summary><div class="detail">'+r[2]+' <span class="ex">'+r[3]+'</span></div>';lad.appendChild(d);});w.innerHTML='<p class="lead">When a word is on the tip of your tongue, climb the rungs until it pops. All cues are open — tap any header to collapse one.</p>';w.appendChild(lad);return w;}
+function assocGame(ctx){const w=document.createElement('div');w.className='gamebox';w.innerHTML='<p class="lead">Say a word, then whatever it sparks, then the next — out loud, no stopping. Type each to keep the chain.</p><label class="fld">Seed word</label><input type="text" class="seed" placeholder="e.g. ocean"><button class="btn ghost sm go" style="margin-top:9px">Start chain</button><input type="text" class="link" placeholder="next word, press Enter…" style="margin-top:9px" disabled><div class="chips"></div>';const go=w.querySelector('.go'),link=w.querySelector('.link'),chips=w.querySelector('.chips');go.addEventListener('click',()=>{link.disabled=false;link.focus();go.textContent='Keep going…';});link.addEventListener('keydown',e=>{if(e.key==='Enter'&&link.value.trim()){const s=document.createElement('span');s.className='chip';s.textContent=link.value.trim();chips.appendChild(s);link.value='';}});return w;}
+function upgradeGame(ctx){
+  const w=document.createElement('div');
+  const wod=document.createElement('div');wod.className='twister';wod.style.background='var(--olive-soft)';wod.style.borderColor='#d6e0bf';
+  wod.innerHTML='<div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--olive)">Word of the day</div><div style="font-family:Nunito;font-weight:800;font-size:21px;color:var(--olive)">'+ctx.wod.w+'</div><div style="font-size:12.5px;color:var(--ink-soft)">'+ctx.wod.def+'</div>';w.appendChild(wod);
+  const intro=document.createElement('p');intro.className='lead';intro.innerHTML='Pin down <em>what you actually mean</em> first, then reach for the precise word. Tap a word to save it.';w.appendChild(intro);
+  (ctx.upgrades||['good']).forEach(key=>{const data=UPGRADES[key];if(!data)return;const v=document.createElement('div');v.className='vup';v.innerHTML='<div><span class="from">'+key+'</span><span class="arrow">→</span><span style="font-size:12px;color:var(--plum);font-weight:600">what do you mean?</span></div><div class="shade-row"></div><div class="tiers"></div>';const row=v.querySelector('.shade-row'),tiers=v.querySelector('.tiers');data.forEach(sh=>{const b=document.createElement('button');b.className='shade-btn';b.textContent=sh.shade;b.addEventListener('click',()=>{row.querySelectorAll('.shade-btn').forEach(x=>x.classList.remove('on'));b.classList.add('on');tiers.innerHTML='<div class="tier"><div class="tier-lab"><span class="lv">Reach</span></div><div class="reveal r1"></div></div><div class="tier"><div class="tier-lab"><span class="lv stretch">Stretch</span></div><div class="reveal r2"></div></div><div class="note"><span class="d"></span><span>Say it out loud: <span class="ex">'+key+' → '+sh.stretch[0]+'</span></span></div>';const mk=(arr,box)=>arr.forEach(x=>{const t=document.createElement('span');t.className='ptag';t.textContent=x;t.addEventListener('click',()=>{if(!DB.collected.includes(x)){DB.collected.unshift(x);save();}t.textContent=x+' ✓';t.style.background='var(--plum)';t.style.color='#fff';});box.appendChild(t);});mk(sh.reach,tiers.querySelector('.r1'));mk(sh.stretch,tiers.querySelector('.r2'));});row.appendChild(b);});w.appendChild(v);});
+  return w;
+}
+function warmupGame(ctx){const vi=dayIndex()%WARMUPS.length;const v=WARMUPS[vi];const w=document.createElement('div');w.className='gamebox';w.innerHTML='<p class="lead">Loosen the muscles you speak with. Stand if you can. <span class="ex">Set '+(vi+1)+' of 3</span></p><ul class="clean numbered"></ul><div class="twister"><div class="tw-text">'+v.drill+'</div><div class="note"><span class="d"></span><span>'+v.note+'</span></div></div>';const ul=w.querySelector('ul');v.items.forEach((x,i)=>{const li=document.createElement('li');li.innerHTML='<span class="num">'+(i+1)+'</span><span>'+x+'</span>';ul.appendChild(li);});return w;}
+function twisterGame(ctx){const w=document.createElement('div');w.className='gamebox';const p=document.createElement('p');p.className='lead';p.innerHTML='Focus: <span class="ex">'+ctx.sound+'</span>. Say each 3× slow and crisp, then build speed. Pencil trick for stubborn words.';w.appendChild(p);ctx.twisters.forEach(tw=>{const box=document.createElement('div');box.className='twister';box.innerHTML='<div class="tw-text">'+tw+'</div><div style="display:flex;align-items:center;gap:9px;margin-top:9px;flex-wrap:wrap"><div class="dots"><span class="dot on"></span><span class="dot"></span><span class="dot"></span></div><button class="btn ghost sm step">Build speed →</button><span style="font-family:Nunito;font-size:11px;color:var(--ink-soft);font-weight:700" class="lab">Slow & clean</span></div>';const dots=box.querySelectorAll('.dot'),lab=box.querySelector('.lab'),step=box.querySelector('.step');const L=['Slow & clean','Conversational','Fast — stay crisp'];let lv=0;step.addEventListener('click',()=>{lv=(lv+1)%3;dots.forEach((x,i)=>x.classList.toggle('on',i<=lv));lab.textContent=L[lv];});w.appendChild(box);});return w;}
+function expandGame(ctx){const s=sentSetsToday();const w=document.createElement('div');w.className='gamebox';w.innerHTML='<p class="lead">Build one clean, ordered sentence from each set — out loud first, then grow it longer. Two sets today: warm up, then stretch.</p><div class="twister"><div style="font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;margin-bottom:6px">1 · General</div><div class="tw-text" style="font-size:16px">'+s.gen+'</div><input type="text" placeholder="one clean sentence using all three…" style="margin-top:9px"><div class="note"><span class="d"></span><span>Now say it again, longer — add where, when, or why.</span></div></div><div class="twister"><div style="font-size:11px;font-weight:700;color:var(--pink);text-transform:uppercase;margin-bottom:6px">2 · Challenge</div><div class="tw-text" style="font-size:15px">'+s.chal+'</div><input type="text" placeholder="one connected sentence using all the words…" style="margin-top:9px"><div class="note"><span class="d"></span><span>Harder set — use the connector word to link two ideas in one sentence.</span></div></div>';return w;}
+function prepGame(ctx){const pr=todayPrepPrompt();const w=document.createElement('div');w.className='gamebox';w.innerHTML='<p class="lead">PREP keeps a point organized: Point · Reason · Example · Point. Use today’s prompt to talk about something real from your day.</p><div class="twister"><div style="font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase">Today’s prompt</div><div class="tw-text" style="font-size:16px;margin-top:4px">Tell me about '+pr+'.</div></div>'+['Point — your main claim','Reason — why it’s true','Example — one concrete instance','Point — restate it'].map((x)=>'<div style="margin-top:9px"><label class="fld">'+x+'</label><input type="text" placeholder="..."></div>').join('')+'<div class="note"><span class="d"></span><span>Then say the whole thing out loud as four smooth sentences.</span></div>';return w;}
+function threeBulletGame(ctx){const w=document.createElement('div');w.className='gamebox';w.innerHTML='<p class="lead">Before saying something complex, pick <b>three bullets only</b>, then speak from them. Reduces overload.</p>'+[1,2,3].map(i=>'<div style="margin-top:9px"><label class="fld">Bullet '+i+'</label><input type="text" placeholder="one word or phrase"></div>').join('')+'<div class="note"><span class="d"></span><span>Then speak for 60s using only those three. Out loud.</span></div>';return w;}
+function retellGame(ctx){const w=document.createElement('div');w.className='gamebox';w.innerHTML='<p class="lead">Watch a 2–3 min clip (any show or video). Then retell it in order — the goal is structured encoding, not perfect recall.</p>'+['Who/what was it about?','What happened first?','What happened next?','Main takeaway?'].map((q,i)=>'<div style="margin-top:9px"><label class="fld">'+(i+1)+'. '+q+'</label><input type="text" placeholder="say it out loud, then jot a few words"></div>').join('');return w;}
+function summaryGame(ctx){const w=document.createElement('div');w.className='gamebox';w.innerHTML='<p class="lead">After a show, article, or conversation, give a spoken <b>5-sentence summary</b> using this structure. Re-expressing in order makes it stick — and trains you to communicate clearly.</p><ul class="clean numbered"><li><span class="num">1</span><span><b>Topic</b> — in one line, what it was about.</span></li><li><span class="num">2</span><span><b>Context</b> — the setup: who, where, or when.</span></li><li><span class="num">3</span><span><b>Key point</b> — the single most important thing.</span></li><li><span class="num">4</span><span><b>Support</b> — one detail or example that backs it up.</span></li><li><span class="num">5</span><span><b>Takeaway</b> — why it matters, or what you concluded.</span></li></ul><div class="note"><span class="d"></span><span>Signpost as you speak: “It was about… The main point was… One example was… So overall…”. Keep each to one sentence.</span></div><textarea rows="5" placeholder="optional: jot your 5 sentences after saying them aloud…" style="margin-top:11px"></textarea>';return w;}
+function dailySampleGame(ctx){const prompts=["What did I do today?","Explain the last show I watched.","Describe a recipe.","Explain a work project in plain language."];const pr=prompts[new Date().getDate()%prompts.length];const w=document.createElement('div');w.className='gamebox';w.innerHTML='<p class="lead">Record yourself answering one prompt for ~60 seconds. Then self-score. <b>This is data, not a performance review.</b></p><div class="twister"><div style="font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase">Today’s prompt</div><div class="tw-text" style="font-size:16px;margin-top:4px">“'+pr+'”</div></div>';const rec=document.createElement('div');rec.className='rec';rec.innerHTML='<div class="opt">Optional recording</div><div style="margin-top:9px"><button class="btn recbtn"><span class="rec-dot"></span>Start recording</button></div><div class="player"></div><div style="font-size:11px;color:var(--ink-soft);margin-top:8px" class="rn"></div>';const btn=rec.querySelector('.recbtn'),player=rec.querySelector('.player'),rn=rec.querySelector('.rn'),dot=rec.querySelector('.rec-dot');let mr=null,ch=[],on=false;btn.addEventListener('click',async()=>{if(on){if(mr)mr.stop();return;}try{const s=await navigator.mediaDevices.getUserMedia({audio:true});mr=new MediaRecorder(s);ch=[];mr.ondataavailable=e=>ch.push(e.data);mr.onstop=()=>{const u=URL.createObjectURL(new Blob(ch,{type:'audio/webm'}));player.innerHTML='<audio controls src="'+u+'"></audio>';s.getTracks().forEach(t=>t.stop());on=false;dot.classList.remove('live');btn.innerHTML='<span class="rec-dot"></span>Record again';};mr.start();on=true;dot.classList.add('live');btn.innerHTML='<span class="rec-dot live"></span>Stop';}catch(e){rn.textContent='Mic unavailable here — open from your home screen, or just speak aloud.';}});w.appendChild(rec);const sc=document.createElement('div');sc.style.marginTop='12px';sc.innerHTML='<label class="fld">Self-score (0 = clear, 4 = stopped/avoided)</label><div class="scorebar"></div>';const bar=sc.querySelector('.scorebar');['0','1','2','3','4'].forEach(v=>{const b=document.createElement('button');b.className='sc-b';b.textContent=v;b.addEventListener('click',()=>{bar.querySelectorAll('.sc-b').forEach(x=>x.classList.remove('on'));b.classList.add('on');});bar.appendChild(b);});w.appendChild(sc);return w;}
+
+/* exercise registry */
+const EX={
+ fluency:{name:"Fluency Sprint",cat:"Word retrieval",icon:'<i class="fa-solid fa-bolt"></i>',ic:"p-teal",pts:50,build:fluencyGame,blurb:"60s · name as many as you can"},
+ talkaround:{name:"Talk-Around-It",cat:"Word retrieval",icon:'<i class="fa-solid fa-right-left"></i>',ic:"p-coral",pts:45,build:talkAround,blurb:"describe it, don't quit"},
+ featuremap:{name:"Feature Map",cat:"Word retrieval",icon:'<i class="fa-solid fa-table-cells-large"></i>',ic:"p-plum",pts:40,build:featureMap,blurb:"unlock a stuck word"},
+ cueladder:{name:"Cue Ladder",cat:"Word retrieval",icon:'<i class="fa-solid fa-stairs"></i>',ic:"p-teal",pts:35,build:cueLadder,blurb:"climb to the word"},
+ assoc:{name:"Word Association",cat:"Word retrieval",icon:'<i class="fa-solid fa-link"></i>',ic:"p-plum",pts:35,build:assocGame,blurb:"keep the chain going"},
+ upgrade:{name:"Word Upgrade",cat:"Vocabulary",icon:'<i class="fa-solid fa-arrow-trend-up"></i>',ic:"p-plum",pts:40,build:upgradeGame,blurb:"reach for the precise word"},
+ warmup:{name:"Mouth & Breath Warm-up",cat:"Diction",icon:'<i class="fa-solid fa-lungs"></i>',ic:"p-olive",pts:25,build:warmupGame,blurb:"loosen the instrument"},
+ twisters:{name:"Twister Trainer",cat:"Diction",icon:'<i class="fa-solid fa-microphone-lines"></i>',ic:"p-olive",pts:30,build:twisterGame,blurb:"slow → fast, stay crisp"},
+ expand:{name:"Sentence Builder",cat:"Sentence",icon:'<i class="fa-solid fa-align-left"></i>',ic:"p-teal",pts:35,build:expandGame,blurb:"build & grow, in order"},
+ prep:{name:"PREP Method",cat:"Sentence",icon:'<i class="fa-solid fa-list-ol"></i>',ic:"p-teal",pts:35,build:prepGame,blurb:"point · reason · example · point"},
+ threebullet:{name:"3-Bullet Speaking",cat:"Sentence",icon:'<i class="fa-solid fa-list-ul"></i>',ic:"p-teal",pts:30,build:threeBulletGame,blurb:"three bullets, then speak"},
+ retell:{name:"Retell Training",cat:"Memory",icon:'<i class="fa-solid fa-arrows-rotate"></i>',ic:"p-coral",pts:40,build:retellGame,blurb:"watch, then retell in order"},
+ summary:{name:"30-Second Summary",cat:"Memory",icon:'<i class="fa-solid fa-pencil"></i>',ic:"p-coral",pts:30,build:summaryGame,blurb:"re-express to remember"},
+ dailysample:{name:"Daily Speech Sample",cat:"Memory",icon:'<i class="fa-solid fa-microphone"></i>',ic:"p-coral",pts:35,build:dailySampleGame,blurb:"record + self-score"}
+};
+function planFor(weekday){const d=DAYS[agendaIdxFor(weekday)];return ['warmup','twisters','upgrade',d.find,d.builder,'dailysample'];}
+function curAgenda(weekday){return DAYS[agendaIdxFor(weekday==null?planDay:weekday)];}
+
+/* ================= DIFFICULTY MODAL ================= */
+const overlay=document.getElementById('overlay'),sheet=document.getElementById('sheet');
+function openDiffModal(exId,exName,after){
+  sheet.innerHTML='<h3>How did that feel?</h3><p>One tap. This feeds your analytics — no wrong answer.</p><div class="difrow"></div><div class="difscale"><span>Easy</span><span>Hard</span></div>';
+  const row=sheet.querySelector('.difrow');
+  for(let i=1;i<=5;i++){const b=document.createElement('button');b.className='dif-b';b.textContent=i;b.addEventListener('click',()=>{const pts=recordCompletion(exId,exName,i);sheet.innerHTML='<div class="award"><div class="pts">+'+pts+' pts</div><p style="margin-top:4px">Logged. Difficulty '+i+'/5.</p><button class="btn full" style="margin-top:14px" id="okBtn">Done</button></div>';sheet.querySelector('#okBtn').addEventListener('click',()=>{closeModal();if(after)after();});});row.appendChild(b);}
+  overlay.classList.add('show');
+}
+function closeModal(){overlay.classList.remove('show');}
+overlay.addEventListener('click',e=>{if(e.target===overlay)closeModal();});
+
+/* ================= RENDER HELPERS ================= */
+const main=document.getElementById('main');
+function header(eyebrow,title,sub){const h=document.createElement('div');h.innerHTML='<div class="eyebrow">'+eyebrow+'</div><h2 class="title">'+title+'</h2>'+(sub?'<p class="sub">'+sub+'</p>':'');return h;}
+function updateHeader(){var p=document.getElementById('hPts');if(p)p.textContent=DB.points;var l=document.getElementById('hLvl');if(l)l.textContent=level();var s=document.getElementById('hStreak');if(s)s.textContent=streakCount();}
+
+/* ===== exercise runner (shared by plan + games) ===== */
+function openExercise(exId,ctx,fromPlan,planDayIdx){
+  main.innerHTML='';
+  const e=EX[exId];
+  const back=document.createElement('button');back.className='backbtn';back.innerHTML='‹ Back';back.addEventListener('click',()=>{fromPlan?renderPlan(planDayIdx):renderGames();});main.appendChild(back);
+  main.appendChild(header(e.cat,e.name,e.blurb));
+  main.appendChild(e.build(ctx||curAgenda()));
+  const done=document.createElement('button');done.className='btn full';done.style.marginTop='16px';done.innerHTML='Complete<span style="display:block;font-size:11px;font-weight:600;opacity:.9;margin-top:2px">+'+e.pts+' points</span>';
+  done.addEventListener('click',()=>{openDiffModal(exId,e.name,()=>{if(fromPlan){const key=planKey(planDayIdx);if(!DB.planDone[key])DB.planDone[key]=[];if(!DB.planDone[key].includes(exId))DB.planDone[key].push(exId);save();renderPlan(planDayIdx);}else{renderGames();}});});
+  main.appendChild(done);
+  main.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ================= SCREENS ================= */
+let section='home',planDay=new Date().getDay(),calView='month',calMetric='both',selDate=todayKey(),calDate=new Date();calDate.setDate(1);
+let gamesCat='All';
+let pendingDataMsg=null;
+function planKey(weekday){return todayKey()+'#'+agendaIdxFor(weekday);}
+
+function renderHome(){
+  main.innerHTML='';
+  main.appendChild(header('Welcome back','Hi, Atiya',todayFact()));(function(){var lv=level();var fl=levelFloor(lv);var cl=levelCeil(lv);var span=Math.max(1,cl-fl);var inLv=DB.points-fl;var maxed=lv>=MAXLVL;var pct=maxed?100:Math.round(inLv/span*100);var hero=document.createElement('div');hero.className='card hero';hero.innerHTML='<div class="herotop"><div class="herol"><div class="cl">Your progress</div><div class="herolv">'+levelTitle(lv)+'</div><div class="herosub">Level '+lv+(maxed?' · max':'')+'</div><div class="streakpill"><i class="fa-solid fa-fire" style="color:#F0A24A;margin-right:1px"></i> <b>'+streakCount()+'</b> day streak</div></div><div class="gauge">'+gaugeSVG(pct,maxed?'MAX':String(inLv),maxed?'Level 30':'/ '+span)+'</div></div>';main.appendChild(hero);})();
+  const key=todayKey();const tw=new Date().getDay();const pd=DB.planDone[planKey(tw)]||[];const total=planFor(tw).length;
+  const cont=document.createElement('div');cont.className='card';cont.style.cursor='pointer';
+  cont.innerHTML='<div class="ct">Today’s plan · '+pd.length+' of '+total+' done</div><div class="cs">'+WEEKDAYS[tw]+' · '+curAgenda(tw).key+'</div>';
+  cont.insertAdjacentHTML('beforeend','<div class="gradbar light" style="margin-top:13px"><i style="width:'+(100-Math.round(pd.length/total*100))+'%"></i></div>');cont.addEventListener('click',()=>{planDay=new Date().getDay();go('plan');});main.appendChild(cont);
+  const L=getLog(key);
+  if(!L||(!L.mem&&!L.speech)){const nudge=document.createElement('div');nudge.className='card';nudge.style.cursor='pointer';nudge.innerHTML='<div class="ct">Daily check-in not done</div><div class="cs">Rate memory, speech & anxiety — even on rest days →</div>';nudge.addEventListener('click',()=>go('log'));main.appendChild(nudge);}
+  const tiles=document.createElement('div');tiles.className='tiles';
+  const T=[['plan','p-teal',ICONS.sessions,'Daily Session','today’s guided set'],['games','p-plum',ICONS.spark,'Mini-Games','pick any, anytime'],['log','p-olive',ICONS.check,'Daily Log','meds · protein · mood'],['stats','p-coral',ICONS.bars,'Progress','trends & insights']];
+  T.forEach(t=>{const d=document.createElement('div');d.className='tile';d.innerHTML='<div class="ti '+t[1]+'">'+t[2]+'</div><b>'+t[3]+'</b><span>'+t[4]+'</span>';d.addEventListener('click',()=>go(t[0]));tiles.appendChild(d);});
+  main.appendChild(tiles);
+  if(!persistOK){const b=document.createElement('div');b.className='banner';b.innerHTML='Add this to your home screen (Share → Add to Home Screen) so your points and logs save between days.';main.appendChild(b);}
+  main.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderPlan(dayIdx){
+  if(dayIdx!=null)planDay=dayIdx;
+  main.innerHTML='';
+  main.appendChild(header('Daily sessions','Today’s speech therapy','Open each exercise, do it, mark complete. Finish all six to bank the day (+100).'));
+  const today=new Date().getDay();
+  const days=document.createElement('div');days.className='days';
+  WEEKDAYS_SHORT.forEach((nm,i)=>{const b=document.createElement('button');b.className='day';b.textContent=nm;b.setAttribute('aria-current',i===planDay);if(i===today)b.setAttribute('data-today','true');b.addEventListener('click',()=>renderPlan(i));days.appendChild(b);});
+  main.appendChild(days);
+  const ag=curAgenda(planDay);
+  const previewTag=planDay!==today?' <span style="font-size:9px;font-weight:700;background:var(--mist);color:var(--violet);padding:2px 8px;border-radius:7px;text-transform:uppercase;letter-spacing:.05em;vertical-align:middle">Preview</span>':'';
+  const theme=document.createElement('div');theme.className='card';theme.innerHTML='<div class="ct">'+WEEKDAYS[planDay]+' · '+ag.key+previewTag+'</div><div class="cs">Sound focus: '+ag.sound+' · Vocab: '+ag.vocabTheme+'</div>';main.appendChild(theme);
+  const plan=planFor(planDay);const pd=DB.planDone[planKey(planDay)]||[];
+  plan.forEach(id=>{const e=EX[id];const isDone=pd.includes(id);const row=document.createElement('div');row.className='xrow'+(isDone?' done':'');row.innerHTML='<div class="xi '+e.ic+'">'+e.icon+'</div><div class="xt"><b>'+e.name+'</b><span>'+e.blurb+'</span></div><div class="meta">'+(isDone?'<div class="chk"><i class="fa-solid fa-check"></i></div>':'<div class="star">+'+e.pts+'</div>')+'</div>';row.addEventListener('click',()=>openExercise(id,curAgenda(planDay),true,planDay));main.appendChild(row);});
+  if(plan.every(id=>pd.includes(id))){DB.dayBanked=DB.dayBanked||{};const banked=DB.dayBanked[planKey(planDay)];const f=document.createElement('div');f.className='finishcard';if(banked){f.innerHTML='<h3>Day complete</h3><p>+100 bonus banked. Difficulty climbs as your points grow.</p>';}else{f.innerHTML='<h3>All six done!</h3><p>Bank your bonus to finish the day.</p>';const b=document.createElement('button');b.className='btn2';b.innerHTML='Complete Day<span>+100 points</span>';b.addEventListener('click',()=>{DB.dayBanked=DB.dayBanked||{};DB.dayBanked[planKey(planDay)]=true;DB.daysCompleted=(DB.daysCompleted||0)+1;addPoints(100);renderPlan();});f.appendChild(b);}main.appendChild(f);}
+  main.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderGames(keepScroll){var _sc=keepScroll?main.scrollTop:0;
+  main.innerHTML='';
+  main.appendChild(header('Mini-Games','Pick a game','Play any single game — no plan needed. Every game still counts toward your points and analytics.'));
+  const cats=['Word retrieval','Vocabulary','Diction','Sentence','Memory'];
+  const pills=document.createElement('div');pills.className='days';
+  ['All'].concat(cats).forEach(c=>{const b=document.createElement('button');b.className='day';b.textContent=c;b.setAttribute('aria-current',gamesCat===c);b.addEventListener('click',()=>{gamesCat=c;renderGames(true);});pills.appendChild(b);});
+  main.appendChild(pills);
+  const shown=gamesCat==='All'?cats:[gamesCat];
+  shown.forEach(cat=>{const ids=Object.keys(EX).filter(id=>EX[id].cat===cat);if(!ids.length)return;const lab=document.createElement('div');lab.className='grouplab';lab.innerHTML=cat+(cat==='Word retrieval'?' <span class="tag">Featured</span>':'');main.appendChild(lab);ids.forEach(id=>{const e=EX[id];const row=document.createElement('div');row.className='xrow';row.innerHTML='<div class="xi '+e.ic+'">'+e.icon+'</div><div class="xt"><b>'+e.name+'</b><span>'+e.blurb+'</span></div><div class="meta"><div class="star">+'+e.pts+'</div></div>';row.addEventListener('click',()=>openExercise(id,curAgenda(),false,planDay));main.appendChild(row);});});
+  if(keepScroll)main.scrollTop=_sc;else main.scrollTo({top:0,behavior:'smooth'});
+}
+
+function renderLog(){
+  main.innerHTML='';
+  main.appendChild(header('Daily Log','Track your day','Log these daily — meds, protein, sleep, and how you felt. This is what powers the correlations.'));
+  // date nav
+  const dn=document.createElement('div');dn.className='logdate';dn.innerHTML='<button class="navbtn p">‹</button><div class="lbl"></div><button class="navbtn n">›</button>';main.appendChild(dn);
+  const lbl=dn.querySelector('.lbl');
+  function refresh(){
+    const L=ensureLog(selDate);const dObj=parseK(selDate);
+    lbl.textContent=(selDate===todayKey()?'Today':MONTHS[dObj.getMonth()].slice(0,3)+' '+dObj.getDate());
+    body.innerHTML='';
+    const togs=document.createElement('div');togs.className='togs';
+    const MEDSVG='<svg viewBox="0 0 376 358" aria-hidden="true"><defs><mask id="caps-co"><rect width="376" height="358" fill="white"/><path fill="black" d="M94 84.7C94 69.9 105.9 58 120.5 58S146 69.9 146 84.7V146H94V84.7Z"/><path fill="black" d="M206.5 154.1c-12.3-18-7.7-33.8 5.6-39.9 13.3-6.1 29-1.8 39.4 13.4l31.6 47.7-43.5 31.6-33.1-52.8Z"/></mask></defs><path fill="currentColor" mask="url(#caps-co)" d="M120 23c33.7 0 61 27.3 61 61v158.8c0 33.7-27.3 61-61 61s-61-27.3-61-61V84c0-33.7 27.3-61 61-61Zm58.4 79.4c26.8-35.2 75.8-33.6 101.5 1.8l65.4 90c21.9 30.2 13.9 72.7-17.2 95.2-31.1 22.6-73.7 16.8-95.6-13.4l-60.8-83.7c-20.6-28.4-17.8-61.8 6.7-89.9Z"/></svg>';
+    const EGGSVG='<svg viewBox="0 0 344 294" aria-hidden="true"><defs><mask id="egg-co"><rect width="344" height="294" fill="white"/><path fill="none" stroke="black" stroke-linecap="round" stroke-width="18" d="M144.5 65.8c-20.6 19.8-33.8 53.3-34.8 90.6"/></mask></defs><path fill="currentColor" mask="url(#egg-co)" d="M276 156.2c0 63.2-46.6 114.4-104.1 114.4S66 219.4 66 156.2C66 95.5 109.3 8 171.9 8 234.4 8 276 95.5 276 156.2Z"/></svg>';
+    const BEDSVG='<svg viewBox="0 0 334 304" aria-hidden="true"><path fill="currentColor" d="M55 99.6C55 50.8 72.8 28 115.9 28h98.3C258 28 279 48.9 279 99.6v3.2c0 10.2-5.4 15.7-15.3 15.7l-11.9-1.7c-9.8-1.4-14.6-6-14.6-15.5v-2.1c0-10-5-15-15-15h-25.4c-10 0-15 5-15 15 0 8.7-5.3 13.4-14.8 13.4s-14.8-4.7-14.8-13.4c0-10-5-15-15-15h-25.4c-10 0-15 5-15 15v2.1c0 9.5-4.8 14.1-14.6 15.5l-11.9 1.7C60.4 118.5 55 113 55 102.8v-3.2Z"/><path fill="currentColor" d="M27 200.2c0-28.3 16.5-47.1 43.3-52.7 63.8-9.5 129.6-9.5 193.4 0 26.8 5.6 43.3 24.4 43.3 52.7v51.7c0 9.3-5 14.2-14 14.2s-14-4.9-14-14.2v-13.8H55v13.8c0 9.3-5 14.2-14 14.2s-14-4.9-14-14.2v-51.7Z"/></svg>';
+    [['meds',MEDSVG,'Medication Taken?'],['protein',EGGSVG,'Protein Goal Met?'],['sedative',BEDSVG,'Sedatives Taken?']].forEach(t=>{const on=L[t[0]];const d=document.createElement('div');d.className='tog '+(on?'on':'off');d.innerHTML='<div class="ic">'+(on?'<i class="fa-solid fa-check"></i>':t[1])+'</div><b>'+t[2]+'</b>';d.addEventListener('click',()=>{setLog(selDate,{[t[0]]:!L[t[0]]});refresh();updateHeader();});togs.appendChild(d);});
+    body.appendChild(togs);
+    const mkRate=(field,lab,labels,anx)=>{const r=document.createElement('div');r.className='rate';r.innerHTML='<span class="rl">'+lab+'</span><div class="rate-row"></div>';const row=r.querySelector('.rate-row');for(let i=1;i<=4;i++){const b=document.createElement('button');b.className='rb'+(anx?' anx':'')+(L[field]===i?' on':'');b.dataset.v=i;b.textContent=labels[i];b.addEventListener('click',()=>{setLog(selDate,{[field]:i});refresh();updateHeader();});row.appendChild(b);}return r;};
+    body.appendChild(mkRate('mem','Memory',RLAB));
+    body.appendChild(mkRate('speech','Speech',RLAB));
+    body.appendChild(mkRate('anx','Anxiety',ALAB,true));
+    const noteW=document.createElement('div');noteW.className='rate';noteW.innerHTML='<span class="rl">Note</span><input type="text" class="nt" placeholder="sleep, stress, a win…">';const nt=noteW.querySelector('.nt');nt.value=L.note||'';nt.addEventListener('change',()=>setLog(selDate,{note:nt.value}));body.appendChild(noteW);
+  }
+  const body=document.createElement('div');main.appendChild(body);
+  dn.querySelector('.p').addEventListener('click',()=>{const d=parseK(selDate);d.setDate(d.getDate()-1);selDate=k(d);refresh();});
+  dn.querySelector('.n').addEventListener('click',()=>{const d=parseK(selDate);if(k(d)===todayKey())return;d.setDate(d.getDate()+1);selDate=k(d);refresh();});
+  refresh();
+  const logDone=document.createElement('button');logDone.className='btn full';logDone.style.marginTop='18px';logDone.innerHTML='Complete<span style="display:block;font-size:11px;font-weight:600;opacity:.9;margin-top:2px">+50 points</span>';logDone.addEventListener('click',()=>{const L=ensureLog(selDate);if(!L.done)addPoints(50);setLog(selDate,{done:true});go('home');});main.appendChild(logDone);
+  main.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ===== analytics ===== */
+function avgWhere(field,val,metric){let s=0,n=0;for(const key in DB.logs){const L=DB.logs[key];if(L[field]===val&&L[metric]){s+=L[metric];n++;}}return n>=2?{avg:s/n,n:n}:null;}
+function ratingFor(L){if(!L)return 0;if(calMetric==='mem')return L.mem||0;if(calMetric==='speech')return L.speech||0;if(calMetric==='anx')return L.anx||0;const a=L.mem||0,b=L.speech||0;if(!a&&!b)return 0;if(!a)return b;if(!b)return a;return Math.round((a+b)/2);}
+function monthGridEl(year,month,small){const wrap=document.createElement('div');const first=new Date(year,month,1),startDow=first.getDay(),days=new Date(year,month+1,0).getDate();if(!small){const wk=document.createElement('div');wk.className='wk';['S','M','T','W','T','F','S'].forEach(x=>{const s=document.createElement('span');s.textContent=x;wk.appendChild(s);});wrap.appendChild(wk);}const grid=document.createElement('div');grid.className='grid7';for(let i=0;i<startDow;i++){const e=document.createElement('div');e.className='cell empty';grid.appendChild(e);}for(let dd=1;dd<=days;dd++){const key=year+'-'+String(month+1).padStart(2,'0')+'-'+String(dd).padStart(2,'0');const L=getLog(key);const r=ratingFor(L);const cell=document.createElement('div');cell.className='cell'+(r>=3?' dark':'')+(key===todayKey()?' today':'');cell.style.background=RCOL[r];if(!small)cell.textContent=dd;if(DB.exDiff[key]&&DB.exDiff[key].length){const dot=document.createElement('span');dot.className='exdot';cell.appendChild(dot);}cell.addEventListener('click',()=>{selDate=key;go('log');});grid.appendChild(cell);}wrap.appendChild(grid);return wrap;}
+function barsEl(values,labels,color){const c=document.createElement('div');c.className='bars';const max=Math.max(1,...values);values.forEach((v,i)=>{const col=document.createElement('div');col.className='col';const bar=document.createElement('i');bar.style.height=(v/max*100)+'%';if(color)bar.style.background=color;const xl=document.createElement('span');xl.className='xl';xl.textContent=labels[i]||'';col.appendChild(bar);col.appendChild(xl);c.appendChild(col);});return c;}
+
+function renderStats(keepScroll){var _sc=keepScroll?main.scrollTop:0;
+  main.innerHTML='';
+  main.appendChild(header('Progress','Your patterns','Trends, correlations, and plain-language insights — from both your exercises and your daily log.'));
+  // insights
+  const insights=[];
+  const proteinSpeech=[avgWhere('protein',true,'speech'),avgWhere('protein',false,'speech')];
+  if(proteinSpeech[0]&&proteinSpeech[1]&&Math.abs(proteinSpeech[0].avg-proteinSpeech[1].avg)>=0.4){const hi=proteinSpeech[0].avg>proteinSpeech[1].avg;insights.push('Your speech averaged <b>'+proteinSpeech[0].avg.toFixed(1)+'</b> on protein days vs <b>'+proteinSpeech[1].avg.toFixed(1)+'</b> without — '+(hi?'protein days look sharper.':'an unexpected pattern worth watching.'));}
+  const sedSpeech=[avgWhere('sedative',true,'speech'),avgWhere('sedative',false,'speech')];
+  if(sedSpeech[0]&&sedSpeech[1]&&Math.abs(sedSpeech[0].avg-sedSpeech[1].avg)>=0.4){const worse=sedSpeech[0].avg<sedSpeech[1].avg;insights.push('After a sedative night, speech averaged <b>'+sedSpeech[0].avg.toFixed(1)+'</b> vs <b>'+sedSpeech[1].avg.toFixed(1)+'</b> otherwise'+(worse?' — sedatives may be costing you the next day.':'.'));}
+  const sedAnx=[avgWhere('sedative',true,'anx'),avgWhere('sedative',false,'anx')];
+  if(sedAnx[0]&&sedAnx[1]&&Math.abs(sedAnx[0].avg-sedAnx[1].avg)>=0.4){insights.push('Anxiety averaged <b>'+sedAnx[0].avg.toFixed(1)+'</b> after sedative nights vs <b>'+sedAnx[1].avg.toFixed(1)+'</b> otherwise.');}
+  if(insights.length){insights.forEach(t=>{const c=document.createElement('div');c.className='insight';c.innerHTML='<b>Pattern:</b> '+t;main.appendChild(c);});}
+  else{const c=document.createElement('div');c.className='insight';c.innerHTML='<b>Keep logging.</b> Once you have several days of check-ins and trackers, patterns appear here automatically — like whether protein days or sedative nights move your scores.';main.appendChild(c);}
+
+  // trends — last 14 days speech & memory
+  const labels=[],sp=[],me=[],act=[];const td=new Date();
+  for(let i=13;i>=0;i--){const d=new Date(td);d.setDate(td.getDate()-i);const key=k(d);const L=getLog(key);labels.push(i%2===0?String(d.getDate()):'');sp.push(L?L.speech:0);me.push(L?L.mem:0);act.push(DB.exDiff[key]?DB.exDiff[key].length:0);}
+  const tc1=document.createElement('div');tc1.className='chartcard';tc1.innerHTML='<div class="ct2"><span>Speech · last 14 days</span><span>1–4</span></div>';tc1.appendChild(barsEl(sp,labels,'var(--teal)'));main.appendChild(tc1);
+  const tc2=document.createElement('div');tc2.className='chartcard';tc2.innerHTML='<div class="ct2"><span>Memory · last 14 days</span><span>1–4</span></div>';tc2.appendChild(barsEl(me,labels,'var(--plum)'));main.appendChild(tc2);
+  const tc3=document.createElement('div');tc3.className='chartcard';tc3.innerHTML='<div class="ct2"><span>Exercises done · last 14 days</span><span>count</span></div>';tc3.appendChild(barsEl(act,labels,'var(--coral)'));main.appendChild(tc3);
+
+  // correlation cards
+  function corrCard(title,a,b,la,lb){const c=document.createElement('div');c.className='chartcard';c.innerHTML='<div class="ct2"><span>'+title+'</span></div><div class="corr"><div class="pair"><b>'+(a?a.avg.toFixed(1):'—')+'</b><span>'+la+(a?' ('+a.n+'d)':'')+'</span></div><div class="pair"><b>'+(b?b.avg.toFixed(1):'—')+'</b><span>'+lb+(b?' ('+b.n+'d)':'')+'</span></div></div>';return c;}
+  main.appendChild(corrCard('Speech: protein vs not',proteinSpeech[0],proteinSpeech[1],'protein','no protein'));
+  main.appendChild(corrCard('Speech: after sedative vs not',sedSpeech[0],sedSpeech[1],'sedative','none'));
+
+  // heatmap
+  const hl=document.createElement('div');hl.className='grouplab';hl.textContent='Calendar';main.appendChild(hl);
+  const bar=document.createElement('div');bar.className='calbar';bar.innerHTML='<div class="seg"><button class="vM" aria-pressed="'+(calView==='month')+'">Month</button><button class="vQ" aria-pressed="'+(calView==='quarter')+'">Quarter</button></div><div class="seg"><button class="kMem" aria-pressed="'+(calMetric==='mem')+'">Memory</button><button class="kSpe" aria-pressed="'+(calMetric==='speech')+'">Speech</button><button class="kAnx" aria-pressed="'+(calMetric==='anx')+'">Anxiety</button><button class="kB" aria-pressed="'+(calMetric==='both')+'">All</button></div>';main.appendChild(bar);
+  bar.querySelector('.vM').onclick=()=>{calView='month';renderStats(true);};bar.querySelector('.vQ').onclick=()=>{calView='quarter';renderStats(true);};
+  bar.querySelector('.kMem').onclick=()=>{calMetric='mem';renderStats(true);};bar.querySelector('.kSpe').onclick=()=>{calMetric='speech';renderStats(true);};bar.querySelector('.kAnx').onclick=()=>{calMetric='anx';renderStats(true);};bar.querySelector('.kB').onclick=()=>{calMetric='both';renderStats(true);};
+  const nav=document.createElement('div');nav.className='calbar';const y=calDate.getFullYear(),m=calDate.getMonth();
+  const cal=document.createElement('div');cal.className='chartcard';
+  if(calView==='month'){nav.innerHTML='<button class="navbtn p">‹</button><div class="callabel">'+MONTHS[m]+' '+y+'</div><button class="navbtn n">›</button>';cal.appendChild(monthGridEl(y,m,false));nav.querySelector('.p').onclick=()=>{calDate=new Date(y,m-1,1);renderStats(true);};nav.querySelector('.n').onclick=()=>{calDate=new Date(y,m+1,1);renderStats(true);};}
+  else{const qs=Math.floor(m/3)*3;nav.innerHTML='<button class="navbtn p">‹</button><div class="callabel">'+MONTHS[qs].slice(0,3)+'–'+MONTHS[qs+2].slice(0,3)+' '+y+'</div><button class="navbtn n">›</button>';for(let i=0;i<3;i++){const mm=qs+i;const qm=document.createElement('div');qm.className='qmonth';qm.innerHTML='<div class="qm-lab">'+MONTHS[mm]+'</div>';qm.appendChild(monthGridEl(y,mm,true));cal.appendChild(qm);}nav.querySelector('.p').onclick=()=>{calDate=new Date(y,qs-3,1);renderStats(true);};nav.querySelector('.n').onclick=()=>{calDate=new Date(y,qs+3,1);renderStats(true);};}
+  main.appendChild(nav);main.appendChild(cal);
+  const leg=document.createElement('div');leg.className='legend';leg.innerHTML='<span><span class="sw" style="background:'+RCOL[1]+'"></span>low</span><span><span class="sw" style="background:'+RCOL[2]+'"></span>okay</span><span><span class="sw" style="background:'+RCOL[3]+'"></span>good</span><span><span class="sw" style="background:'+RCOL[4]+'"></span>high</span><span><span class="exdot" style="position:static;display:inline-block;margin-right:4px"></span>exercise done</span>';main.appendChild(leg);
+
+  if(DB.collected.length){const hl2=document.createElement('div');hl2.className='grouplab';hl2.textContent='Your word collection';main.appendChild(hl2);const g=document.createElement('div');g.className='collgrid';DB.collected.slice(0,40).forEach(wd=>{const t=document.createElement('span');t.className='collword';t.textContent=wd;g.appendChild(t);});main.appendChild(g);}
+
+  // ===== data backup: export / import =====
+  const dl=document.createElement('div');dl.className='grouplab';dl.textContent='Your data';main.appendChild(dl);
+  const dcard=document.createElement('div');dcard.className='chartcard';
+  dcard.innerHTML='<div class="cs" style="margin-bottom:12px">Your progress saves automatically on this device. Export a backup to keep it safe, or to move it to another phone or browser. Importing replaces the data on this device.</div>';
+  const drow=document.createElement('div');drow.style.cssText='display:flex;gap:9px;flex-wrap:wrap';
+  const expBtn=document.createElement('button');expBtn.className='btn sm';expBtn.innerHTML='<i class="fa-solid fa-download"></i>&nbsp; Export backup';
+  const impBtn=document.createElement('button');impBtn.className='btn sm ghost';impBtn.innerHTML='<i class="fa-solid fa-upload"></i>&nbsp; Import backup';
+  const fileInp=document.createElement('input');fileInp.type='file';fileInp.accept='application/json,.json';fileInp.style.display='none';
+  const msg=document.createElement('div');msg.className='cs';msg.style.marginTop='11px';
+  if(pendingDataMsg){msg.textContent=pendingDataMsg.text;msg.style.color=pendingDataMsg.ok?'var(--olive)':'var(--coral)';msg.style.fontWeight='700';pendingDataMsg=null;}
+  expBtn.addEventListener('click',function(){var ok=exportData();msg.textContent=ok?'Backup downloaded to your device.':'Export failed — please try again.';msg.style.color=ok?'var(--olive)':'var(--coral)';msg.style.fontWeight='700';});
+  impBtn.addEventListener('click',function(){fileInp.click();});
+  fileInp.addEventListener('change',function(){var f=fileInp.files&&fileInp.files[0];if(!f)return;var proceed=(typeof confirm==='function')?confirm('Import this backup? It will replace the points, logs and progress currently on this device.'):true;if(!proceed){fileInp.value='';return;}importData(f,function(ok,m){fileInp.value='';if(ok){pendingDataMsg={ok:true,text:m};renderStats();}else{msg.textContent=m;msg.style.color='var(--coral)';msg.style.fontWeight='700';}});});
+  drow.appendChild(expBtn);drow.appendChild(impBtn);dcard.appendChild(drow);dcard.appendChild(fileInp);dcard.appendChild(msg);main.appendChild(dcard);
+
+  if(keepScroll)main.scrollTop=_sc;else main.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ================= NAV ================= */
+const tabbar=document.getElementById('tabbar');
+function go(s){section=s;[...tabbar.children].forEach(b=>b.setAttribute('aria-current',b.dataset.s===s));var _st=document.getElementById('subtitle');if(_st)_st.textContent={home:'Daily practice',plan:'Sessions',games:'Mini-Games',log:'Daily Log',stats:'Progress'}[s];if(s==='home')renderHome();else if(s==='plan')renderPlan();else if(s==='games')renderGames();else if(s==='log'){selDate=todayKey();renderLog();}else renderStats();}
+[...tabbar.children].forEach(b=>b.addEventListener('click',()=>go(b.dataset.s)));
+
+updateHeader();renderHome();
+  }
+}
+</script>
+</body>
+</html>
